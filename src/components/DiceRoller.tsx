@@ -121,7 +121,7 @@ const DiceRoller: React.FC = () => {
         {results.map((result, i) => (
           <div key={i}>
             <p>{result.details}</p>
-            <p>Result: {result.result}</p>
+            <p>Results: {result.result}</p>
           </div>
         ))}
       </div>
