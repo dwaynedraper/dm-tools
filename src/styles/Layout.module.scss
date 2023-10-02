@@ -1,0 +1,20 @@
+.sidebar {
+  @apply h-screen w-96 bg-red-100
+}
+
+.content {
+  @apply h-screen w-full
+}
+
+.contextBar {
+  @apply h-screen px-2 w-192 bg-slate-100
+}
+
+.contextWrapper {
+  @apply h-full overflow-y-scroll
+}
+  // m-0 bg-slate-300 rounded-lg shadow-lg p-1
+
+.contextItem {
+  @apply h-64 w-full bg-slate-700 rounded-lg p-2 my-1 text-gray-400
+}

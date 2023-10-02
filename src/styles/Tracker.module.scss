@@ -1,0 +1,11 @@
+.actors {
+  @apply flex flex-col
+}
+
+.bar-container {
+  @apply fixed w-5 h-[18.75rem] bg-gray-400
+}
+
+.bar {
+  @apply w-full h-1/5 bg-rose-600 w-1
+}
