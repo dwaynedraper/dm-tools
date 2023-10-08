@@ -1,107 +1,180 @@
 // React/Next imports
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+
+// Component imports
+import AddActorForm from '@/components/AddActorForm';
+import ActorQuickCard from '@/components/ActorQuickCard';
 
 // Other imports
-import styles from '@/styles/Tracker.module.scss'
-import { Actor } from '@/types/actor'
-import classNames from 'classnames'
+import styles from '@/styles/Tracker.module.scss';
+import { Actor } from '@/types/actor';
+import classNames from 'classnames';
+import { Bungee_Spice, Inter, Kaushan_Script } from 'next/font/google';
+import { Button } from '@/components/base/Button';
+import ActorDetails from './ActorDetails';
+
+const inter = Inter({ weight: '400', subsets: ['latin'] });
+const spice = Bungee_Spice({ weight: '400', subsets: ['latin'] });
+const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
 interface TrackerProps {
-  actors?: Actor[]
+  data: any;
+  children: React.ReactNode;
 }
 
 // This will be replaced with the list of characters and monsters in the encounter
 // If the encounter isn't planned, you can add new actors to the list
 // The characters should always be here, and the monsters will be there for planned encounters
 const actors = [
-  { id: 1, name: 'Grendish' },
-  { id: 2, name: 'Three Toes' },
-  { id: 3, name: 'Hand Of Borgen' },
-]
+  { id: '1', name: 'Grendish' },
+  { id: '2', name: 'Three Toes' },
+  { id: '3', name: 'Hand Of Borgen' },
+];
 
-export default function Tracker(): JSX.Element {
-  const [currentActors, setCurrentActors] = useState(actors)
-  const [sorted, setSorted] = useState(false)
+export default function Tracker({ children }) {
+  const [currentActors, setCurrentActors] = useState<Actor[]>([]);
+  const [data, setData] = React.useState<any[]>([]);
+  const [isAddActorDisplayed, setIsAddActorDisplayed] = useState(false);
+  const [isEncounterActive, setIsEncounterActive] = useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [sorted, setSorted] = useState(false);
+
+  !loading && console.log('currentActors', currentActors[0].name);
+
+  /**
+   * State for the button's active, hovered, and selected states
+   * isActive: It is this actor's turn
+   * isHovered: The user is hovering over this actor
+   * isSelected: The user has selected this actor by clicking
+   * The hovered and selected items change the displayed component in <section> for main content
+   * isHovered will temporarily change the component
+   * isSelected is what component shows when none are hovered
+   */
+  const [activeActor, setIsActive] = useState('');
+  const [isHovered, setIsHovered] = useState('');
+  const [isSelected, setIsSelected] = useState('');
 
   useEffect(() => {
-    // Map the actors to the currentActors state
-    // Make a call to API route /api/party/:id/actors
-  }, [])
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/party/actors', {
+          method: 'GET',
+        });
+        if (response.ok) {
+          const json = await response.json();
+          setCurrentActors(json);
+          setLoading(false);
+        } else {
+          console.error('Failed to fetch data', await response.text());
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const sortActors = () => {
-    // Check if all actors have an initBonus value. If not, roll for them.
-    // Sort the actors by initiative
-    //   const newActors = currentActors.slice()
-    //   newActors.sort((a, b) => a.id - b.id)
-    //   setCurrentActors(newActors)
-    //   <React.Fragment key={actor.id}>
-    //   {index === 0 && (
-    //     <>
-    //       <p className="text-xs text-green-500 font-bold">
-    //         Begin Round
-    //       </p>
-    //       <hr className="border-1 border-green-500 mb-2" />
-    //     </>
-    //   )}
-    //   <div
-    //     className={classNames(
-    //       'px-4 py-1 border border-l-0 border-slate-900 bg-slate-700 text-lg text-white font-bold rounded-r-xl whitespace-nowrap hover:border-slate-200 hover:bg-slate-300 hover:text-slate-800 hover:cursor-pointer',
-    //       {
-    //         'mb-8': index !== currentActors.length - 1, // corrected line
-    //       },
-    //     )}
-    //   >
-    //     {actor.name}
-    //   </div>
-    //   {index === currentActors.length - 1 && ( // corrected line
-    //     <>
-    //       <hr className="border-1 border-red-500 mt-2" />
-    //       <p className="text-xs text-red-500 font-bold">End Round</p>
-    //     </>
-    //   )}
-    // </React.Fragment>
-  }
+    fetchData();
+  }, []);
 
   const cycleActors = () => {
-    const newActors = currentActors.slice()
-    const firstActor = newActors.shift()
+    const newActors = currentActors.slice();
+    const firstActor = newActors.shift();
     if (firstActor) {
-      newActors.push(firstActor)
+      newActors.push(firstActor);
     }
-    setCurrentActors(newActors)
-  }
+    setCurrentActors(newActors);
+  };
+
+  const openAddActorForm = () => {
+    setIsAddActorDisplayed(true);
+  };
+
+  const handleAddActor = async (formDataObj: any) => {
+    // Add actor to the encounter's state, but do not persist to the database
+    // This is because the encounter is not planned, and we don't want to persist
+
+    const newActor = {
+      id: Math.floor(Math.random() * 1000),
+      ...formDataObj,
+    };
+    setCurrentActors([...currentActors, newActor]);
+    setIsAddActorDisplayed(false);
+    console.log('newActor', newActor);
+  };
+
+  const beginEncounter = () => {
+    setIsEncounterActive(true);
+  };
+
+  const endCombat = () => {
+    setIsEncounterActive(false);
+  };
 
   return (
     <div className="h-full flex">
       <div
-        className={`${styles.actors} h-full w-fit bg-slate-300 text-slate-900 overflow-scroll hide-scrollbar`}
+        className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
-        <div className="bg-slate-100 pt-24 pr-4 pl-[2px] h-full">
-          {!sorted &&
+        <div className="bg-slate-600 pt-24 px-4  h-full">
+          {loading && <div>Fetching actors...</div>}
+
+          {!loading &&
+            currentActors.length !== 0 &&
             currentActors.map((actor, index) => (
-              <div
-                key={actor.id}
-                className={classNames(
-                  'px-4 border border-l-0 border-slate-900 bg-slate-700 text-lg font-bold rounded-r-xl whitespace-nowrap  hover:cursor-pointer shadow hover:shadow-3xl shadow-teal-500 hover:shadow-teal-600',
-                  {
-                    'py-4 text-teal-200': index === 0,
-                    'py-1 text-white': index !== 0,
-                    'mb-8': index !== currentActors.length - 1, // corrected line
-                  },
-                )}
-              >
-                {actor.name}
-              </div>
+              <ActorQuickCard
+                key={index}
+                actor={actor}
+                index={index}
+                isActive={actor.name === activeActor}
+                isHovered={actor.name === isHovered}
+                isSelected={actor.name === isSelected}
+              />
             ))}
         </div>
-        <button onClick={cycleActors}>Cycle</button>
-        <div className={`${styles.barContainer} rounded-full`}>
-          <div className={`${styles.bar} rounded-full`}></div>
-        </div>
+
+        {!isEncounterActive && (
+          <Button
+            className={`border-t border-slate-100`}
+            onClick={openAddActorForm}
+          >
+            Add Actor
+          </Button>
+        )}
+
+        {isEncounterActive ? (
+          <>
+            <Button
+              className={`border-t border-slate-100`}
+              onClick={cycleActors}
+            >
+              Cycle
+            </Button>
+            <Button className={`border-t border-slate-100`} onClick={endCombat}>
+              End Combat
+            </Button>
+          </>
+        ) : (
+          <Button
+            className={`border-t border-slate-100`}
+            onClick={beginEncounter}
+          >
+            Start Encounter
+          </Button>
+        )}
       </div>
-      <div className="h-full w-3/4 bg-slate-200 p-4 text-slate-950">
-        <div className="bg-white rounded shadow shadow-lg shadow-slate-600 h-full "></div>
-      </div>
+      <section className="h-full w-full p-4 bg-slate-900 overflow-auto">
+        {isAddActorDisplayed && (
+          <ActorDetails actor={currentActors[0]} />
+          /* <ActorDetails
+            onSubmit={handleAddActor}
+            onCancel={() => {
+              setIsAddActorDisplayed(false);
+            }}
+          /> */
+        )}
+        {children}
+      </section>
     </div>
-  )
+  );
 }
