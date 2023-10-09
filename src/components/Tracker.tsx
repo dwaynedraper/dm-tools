@@ -119,6 +119,14 @@ export default function Tracker({ children }) {
     setIsEncounterActive(false);
   };
 
+  const getActor = () => {
+    if (isHovered)
+      return currentActors.find((actor) => actor.name === isHovered);
+    if (isSelected)
+      return currentActors.find((actor) => actor.name === isSelected);
+    return currentActors[activeActor];
+  };
+
   return (
     <div className="flex h-full">
       <div
@@ -189,7 +197,7 @@ export default function Tracker({ children }) {
               }}
             />
             <hr className="invisible mb-16" />
-            <ActorDetails actor={currentActors[0]} />
+            <ActorDetails actor={getActor()} />
           </>
         )}
         {children}

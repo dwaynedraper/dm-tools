@@ -31,6 +31,7 @@ import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 import FlexSection from './folder/inner-container/FlexSection';
 import BasicSection from './folder/inner-container/BasicSection';
 import Heading1 from './folder/element/Heading1';
+import { Actor } from '@/types/actor';
 
 interface AddActorFormProps {
   onSubmit: (formDataObj: any) => void;
@@ -56,12 +57,29 @@ export default function AddActorForm({
     if (!formRef.current) return; // Guard clause
 
     const formData = new FormData(formRef.current); // Extract form data using FormData API
-    const formDataObj = {}; // Object to store form data as key-value pairs
+    const formDataObj = {
+      id: '',
+      name: '',
+      stats: {
+        ac: 0,
+        currHp: 0,
+        maxHp: 0,
+        initBonus: 0,
+        initiative: '',
+      } as any,
+    }; // Object to store form data as key-value pairs
 
+    formDataObj.id = Math.floor(Math.random() * 1000).toString();
+    formDataObj.stats.ac = String(formData.get('armorClass'));
+    formDataObj.stats.currHp = String(formData.get('hitPoints'));
+    formDataObj.stats.maxHp = String(formData.get('hitPoints'));
+    formDataObj.stats.initBonus = String(formData.get('initBonus'));
+    formDataObj.stats.initiative = String(formData.get('initiative'));
+    formDataObj.name = String(formData.get('name'));
     // Convert FormData to an object
-    formData.forEach((value, key) => {
-      formDataObj[key] = value;
-    });
+    // formData.forEach((value, key) => {
+    //   formDataObj[key] = value;
+    // });
     console.log('formDataObj', formDataObj);
 
     onSubmit(formDataObj);

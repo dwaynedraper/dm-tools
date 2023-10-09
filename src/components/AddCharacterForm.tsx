@@ -28,16 +28,6 @@ const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 const quint = Quintessential({ weight: '400', subsets: ['latin'] });
 const racing = Racing_Sans_One({ weight: '400', subsets: ['latin'] });
 
-var url = require('url');
-
-function fullUrl(req) {
-  return url.format({
-    protocol: req.protocol,
-    host: req.get('host'),
-    pathname: req.originalUrl,
-  });
-}
-
 export default function AddActorForm() {
   const formRef = useRef(null);
 
@@ -55,7 +45,7 @@ export default function AddActorForm() {
     });
 
     try {
-      const response = await fetch(`${fullUrl}/api/party/actors`, {
+      const response = await fetch(`/api/party/actors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

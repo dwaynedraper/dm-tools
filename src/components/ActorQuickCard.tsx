@@ -27,7 +27,7 @@ export default function ActorQuickCard({
         key={actor.name}
         className={classNames(
           `${kaushan.className}
-        flex justify-between mb-8 px-4 py-2 text-2xl font-bold rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer`,
+        flex justify-between items-center mb-8 px-4 py-2 text-2xl font-bold rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer`,
           {
             'py-4 border bg-slate-900 text-cyan-500 text-3xl underline':
               isActive,
@@ -36,8 +36,8 @@ export default function ActorQuickCard({
           },
         )}
       >
-        {actor.name}
-        {actor.stats?.currHp && actor.stats?.currHp}
+        <div>{actor.name}</div>
+        <div>{actor.stats?.currHp && actor.stats?.currHp}</div>
       </div>
     </div>
   );
