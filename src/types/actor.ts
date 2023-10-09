@@ -3,7 +3,7 @@ export interface Actor {
   friendly?: boolean;
   name: string;
   stats?: {
-    hp?: number;
+    currHp?: number;
     maxHp?: number;
     tempHp?: number;
     ac?: number;

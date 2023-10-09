@@ -56,7 +56,6 @@ export default function AddActorForm({
     if (!formRef.current) return; // Guard clause
 
     const formData = new FormData(formRef.current); // Extract form data using FormData API
-    console.log('formData', formData);
     const formDataObj = {}; // Object to store form data as key-value pairs
 
     // Convert FormData to an object
@@ -91,7 +90,7 @@ export default function AddActorForm({
             The actor&apos;s basic information.
           </p> */}
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <label
                 htmlFor="name"
@@ -141,7 +140,7 @@ export default function AddActorForm({
             Use a permanent address where you can receive mail.
           </p> */}
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
                 htmlFor="armorClass"
@@ -218,8 +217,8 @@ export default function AddActorForm({
         </BasicSection>
       </FormSpacer12>
 
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <div className="sm:col-span-1 flex align-middle">
+      <div className="flex items-center justify-end mt-6 gap-x-6">
+        <div className="flex align-middle sm:col-span-1">
           <label
             htmlFor="country"
             className={`block font-medium leading-6 text-white`}

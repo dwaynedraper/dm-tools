@@ -6,9 +6,8 @@ interface ActorDetailsProps {
 }
 
 export default function ActorDetails({ actor }) {
-  console.log(actor);
   return (
-    <div className="bg-orange-500">
+    <div className="border border-slate-200/10">
       <div>{actor.name}</div>
       <div>{actor.initBonus}</div>
     </div>

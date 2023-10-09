@@ -39,25 +39,23 @@ export default function Tracker({ children }) {
   const [loading, setLoading] = React.useState(true);
   const [sorted, setSorted] = useState(false);
 
-  !loading && console.log('currentActors', currentActors[0].name);
-
   /**
    * State for the button's active, hovered, and selected states
    * isActive: It is this actor's turn
-   * isHovered: The user is hovering over this actor
+   * isHovered: The user is hovering over this actor (handle CSS with hover:property)
    * isSelected: The user has selected this actor by clicking
    * The hovered and selected items change the displayed component in <section> for main content
    * isHovered will temporarily change the component
    * isSelected is what component shows when none are hovered
    */
-  const [activeActor, setIsActive] = useState('');
+  const [activeActor, setActiveActor] = useState(0);
   const [isHovered, setIsHovered] = useState('');
   const [isSelected, setIsSelected] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/party/actors', {
+        const response = await fetch('/api/party/actors', {
           method: 'GET',
         });
         if (response.ok) {
@@ -78,12 +76,11 @@ export default function Tracker({ children }) {
   }, []);
 
   const cycleActors = () => {
-    const newActors = currentActors.slice();
-    const firstActor = newActors.shift();
-    if (firstActor) {
-      newActors.push(firstActor);
+    if (activeActor === currentActors.length - 1) {
+      setActiveActor(0);
+    } else {
+      setActiveActor(activeActor + 1);
     }
-    setCurrentActors(newActors);
   };
 
   const openAddActorForm = () => {
@@ -100,7 +97,18 @@ export default function Tracker({ children }) {
     };
     setCurrentActors([...currentActors, newActor]);
     setIsAddActorDisplayed(false);
-    console.log('newActor', newActor);
+  };
+
+  const setHovered = (actorName: string) => {
+    setIsHovered(actorName);
+  };
+
+  const setSelected = (actorName: string) => {
+    setIsSelected(actorName);
+  };
+
+  const unsetHovered = () => {
+    setIsHovered('');
   };
 
   const beginEncounter = () => {
@@ -112,24 +120,32 @@ export default function Tracker({ children }) {
   };
 
   return (
-    <div className="h-full flex">
+    <div className="flex h-full">
       <div
         className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
-        <div className="bg-slate-600 pt-24 px-4  h-full">
+        <div className="h-full px-4 pt-24 bg-slate-800 w-96">
           {loading && <div>Fetching actors...</div>}
 
           {!loading &&
             currentActors.length !== 0 &&
             currentActors.map((actor, index) => (
-              <ActorQuickCard
+              <div
+                className=""
                 key={index}
-                actor={actor}
-                index={index}
-                isActive={actor.name === activeActor}
-                isHovered={actor.name === isHovered}
-                isSelected={actor.name === isSelected}
-              />
+                onMouseEnter={() => setHovered(actor.name)}
+                onMouseLeave={() => unsetHovered()}
+                onClick={() => setSelected(actor.name)}
+              >
+                <ActorQuickCard
+                  key={index}
+                  actor={actor}
+                  index={index}
+                  isActive={index === activeActor}
+                  isHovered={actor.name === isHovered}
+                  isSelected={actor.name === isSelected}
+                />
+              </div>
             ))}
         </div>
 
@@ -163,15 +179,18 @@ export default function Tracker({ children }) {
           </Button>
         )}
       </div>
-      <section className="h-full w-full p-4 bg-slate-900 overflow-auto">
+      <section className="w-full h-full p-4 overflow-auto bg-slate-900">
         {isAddActorDisplayed && (
-          <ActorDetails actor={currentActors[0]} />
-          /* <ActorDetails
-            onSubmit={handleAddActor}
-            onCancel={() => {
-              setIsAddActorDisplayed(false);
-            }}
-          /> */
+          <>
+            <AddActorForm
+              onSubmit={handleAddActor}
+              onCancel={() => {
+                setIsAddActorDisplayed(false);
+              }}
+            />
+            <hr className="invisible mb-16" />
+            <ActorDetails actor={currentActors[0]} />
+          </>
         )}
         {children}
       </section>

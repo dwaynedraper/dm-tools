@@ -14,6 +14,11 @@ import styles from '@/styles/AddActorForm.module.scss';
 import { Button } from '@/components/base/Button';
 import FormSpacer12 from '@/components/folder/outer-wrapper/FormSpacer12';
 
+import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
+import FlexSection from './folder/inner-container/FlexSection';
+import BasicSection from './folder/inner-container/BasicSection';
+import Heading1 from './folder/element/Heading1';
+
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
 const amarante = Amarante({ weight: '400', subsets: ['latin'] });
@@ -23,10 +28,15 @@ const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 const quint = Quintessential({ weight: '400', subsets: ['latin'] });
 const racing = Racing_Sans_One({ weight: '400', subsets: ['latin'] });
 
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import FlexSection from './folder/inner-container/FlexSection';
-import BasicSection from './folder/inner-container/BasicSection';
-import Heading1 from './folder/element/Heading1';
+var url = require('url');
+
+function fullUrl(req) {
+  return url.format({
+    protocol: req.protocol,
+    host: req.get('host'),
+    pathname: req.originalUrl,
+  });
+}
 
 export default function AddActorForm() {
   const formRef = useRef(null);
@@ -45,7 +55,7 @@ export default function AddActorForm() {
     });
 
     try {
-      const response = await fetch('http://localhost:3000/api/party/actors', {
+      const response = await fetch(`${fullUrl}/api/party/actors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +92,7 @@ export default function AddActorForm() {
             The actor&apos;s basic information.
           </p>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <label
                 htmlFor="name"
@@ -132,7 +142,7 @@ export default function AddActorForm() {
             Use a permanent address where you can receive mail.
           </p>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
                 htmlFor="armor-class"
@@ -206,7 +216,7 @@ export default function AddActorForm() {
               </div>
             </div>
 
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -223,7 +233,7 @@ export default function AddActorForm() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -240,7 +250,7 @@ export default function AddActorForm() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -257,7 +267,7 @@ export default function AddActorForm() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -274,7 +284,7 @@ export default function AddActorForm() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -291,7 +301,7 @@ export default function AddActorForm() {
                 />
               </div>
             </div>
-            <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="flex flex-col items-center sm:col-span-1">
               <label
                 htmlFor="str"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
@@ -307,7 +317,7 @@ export default function AddActorForm() {
                   className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
-              <p className="text-sm mt-2">Proficient?</p>
+              <p className="mt-2 text-sm">Proficient?</p>
               <input type="checkbox" />
             </div>
 
@@ -402,12 +412,12 @@ export default function AddActorForm() {
               </legend>
               <div className="mt-6 space-y-6">
                 <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
+                  <div className="flex items-center h-6">
                     <input
                       id="comments"
                       name="comments"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      className="w-4 h-4 text-indigo-600 rounded border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -423,12 +433,12 @@ export default function AddActorForm() {
                   </div>
                 </div>
                 <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
+                  <div className="flex items-center h-6">
                     <input
                       id="candidates"
                       name="candidates"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      className="w-4 h-4 text-indigo-600 rounded border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -444,12 +454,12 @@ export default function AddActorForm() {
                   </div>
                 </div>
                 <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
+                  <div className="flex items-center h-6">
                     <input
                       id="offers"
                       name="offers"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      className="w-4 h-4 text-indigo-600 rounded border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                     />
                   </div>
                   <div className="text-sm leading-6">
@@ -476,7 +486,7 @@ export default function AddActorForm() {
                     id="push-everything"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                    className="w-4 h-4 text-indigo-600 border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                   />
                   <label
                     htmlFor="push-everything"
@@ -490,7 +500,7 @@ export default function AddActorForm() {
                     id="push-email"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                    className="w-4 h-4 text-indigo-600 border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                   />
                   <label
                     htmlFor="push-email"
@@ -504,7 +514,7 @@ export default function AddActorForm() {
                     id="push-nothing"
                     name="push-notifications"
                     type="radio"
-                    className="h-4 w-4 border-white/30 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                    className="w-4 h-4 text-indigo-600 border-white/30 bg-white/5 focus:ring-indigo-600 focus:ring-offset-gray-900"
                   />
                   <label
                     htmlFor="push-nothing"
@@ -519,16 +529,16 @@ export default function AddActorForm() {
         </BasicSection>
       </FormSpacer12>
 
-      <div className="mt-6 flex items-center justify-end gap-x-6">
+      <div className="flex items-center justify-end mt-6 gap-x-6">
         <button
           type="button"
-          className="text-sm font-semibold text-white border border-red-600 rounded-md px-3 py-2 box-border"
+          className="box-border px-3 py-2 text-sm font-semibold text-white border border-red-600 rounded-md"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="rounded-md bg-cyan-600 border border-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          className="px-3 py-2 text-sm font-semibold text-white border rounded-md shadow-sm bg-cyan-600 border-cyan-600 hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
         >
           Save
         </button>

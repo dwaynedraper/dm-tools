@@ -11,6 +11,8 @@ import {
   XMarkIcon,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
+import { RxDashboard } from 'react-icons/rx';
+import { BsLayoutTextSidebarReverse } from 'react-icons/bs';
 import { Cinzel_Decorative } from 'next/font/google';
 import Link from 'next/link';
 import styles from '@/styles/Layout.module.scss';
@@ -31,14 +33,14 @@ gsap.registerPlugin();
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: false },
-  { name: 'Tracker', href: '/tracker', icon: UsersIcon, current: false },
-  { name: 'World', href: '/world', icon: FolderIcon, current: false },
-];
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+  { name: 'Dashboard', href: '/dashboard', icon: RxDashboard, current: false },
+  {
+    name: 'Tracker',
+    href: '/tracker',
+    icon: BsLayoutTextSidebarReverse,
+    current: false,
+  },
+  { name: 'World Builder', href: '/world', icon: FolderIcon, current: false },
 ];
 
 // function classNames(...classes: string[]) {
@@ -54,44 +56,20 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [contextBarOpen, setContextBarOpen] = useState(false);
 
-  // useEffect(() => {
-  //   let ctx = gsap.context(() => {
-  //     gsap.to('.sidebar', {
-  //       yPercent: 400,
-  //       ease: 'none',
-  //       paused: true,
-  //     })
-
-  //     function updateScrollBar() {
-  //       console.log('I updated my size')
-  //     }
-  //     window.addEventListener('scroll', updateScrollBar)
-  //     window.addEventListener('resize', updateScrollBar)
-  //   }, boxRef)
-
-  //   return () => ctx.revert()
-  // }, [])
-
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <main className="h-screen w-full flex" ref={boxRef}>
-      <div
-        className={
-          sidebarOpen
-            ? `${styles.sidebar} sidebar show-scrollbar`
-            : `${styles.sidebar} w-96`
-        }
-      >
-        <div className="flex grow h-full flex-col gap-y-5 overflow-y-auto bg-slate-900 px-6 pb-4 ring-1 ring-white/10">
-          <div className="flex flex-col shrink-0 items-center border-b border-cyan-700 z-10">
-            <LiaDiceD20Solid
-              onClick={toggleSidebar}
-              className="h-12 w-12 text-cyan-500"
-            />
-            {!sidebarOpen && (
+    <main className="flex w-full h-screen" ref={boxRef}>
+      <div className={sidebarOpen ? `${styles.sidebar}` : `${styles.sidebar}`}>
+        <div
+          onClick={toggleSidebar}
+          className="flex flex-col h-full px-6 pb-4 overflow-y-auto grow gap-y-5 bg-slate-900 ring-1 ring-white/10"
+        >
+          <div className="z-10 flex flex-col items-center border-b shrink-0 border-cyan-700">
+            <LiaDiceD20Solid className="w-12 h-12 text-cyan-500" />
+            {sidebarOpen && (
               <>
                 <p className={`text-5xl text-cyan-500 ${kaushan.className}`}>
                   Initiative
@@ -104,11 +82,11 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
               </>
             )}
           </div>
-          <nav className="flex flex-1 flex-col">
+          <nav className="flex flex-col flex-1">
             <ul
               role="list"
               className={classNames(`flex flex-1 flex-col gap-y-7`, {
-                'items-center': sidebarOpen,
+                'items-center': !sidebarOpen,
               })}
             >
               <li>
@@ -121,54 +99,30 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
                           item.current
                             ? 'bg-gray-800 text-white'
                             : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold items-center',
                         )}
                       >
                         <item.icon
-                          className="h-8 w-8 shrink-0"
+                          className="w-8 h-8 shrink-0"
                           aria-hidden="true"
                         />
-                        {!sidebarOpen && item.name}
+                        {sidebarOpen && item.name}
                       </a>
                     </li>
                   ))}
                 </ul>
               </li>
-              {/* <li>
-                <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams
-                </div>
-                <ul role="list" className="-mx-2 mt-2 space-y-1">
-                  {teams.map((team) => (
-                    <li key={team.name}>
-                      <a
-                        href={team.href}
-                        className={classNames(
-                          team.current
-                            ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                        )}
-                      >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                          {team.initial}
-                        </span>
-                        <span className="truncate">{team.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li> */}
+
               <li className="mt-auto">
                 <a
                   href="#"
-                  className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
+                  className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
                 >
                   <Cog6ToothIcon
-                    className="h-8 w-8 shrink-0"
+                    className="w-8 h-8 shrink-0"
                     aria-hidden="true"
                   />
-                  {!sidebarOpen && 'Settings'}
+                  {sidebarOpen && 'Settings'}
                 </a>
               </li>
             </ul>
