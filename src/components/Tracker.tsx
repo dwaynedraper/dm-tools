@@ -165,6 +165,7 @@ export default function Tracker({ children }) {
                   key={index}
                   actor={actor}
                   index={index}
+                  isEncounterActive={isEncounterActive}
                   isActive={index === activeActor}
                   isHovered={actor.name === isHovered}
                   isSelected={actor.name === isSelected}
