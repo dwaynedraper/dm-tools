@@ -119,6 +119,30 @@ export default function Tracker({ children }) {
     setIsEncounterActive(false);
   };
 
+  const handleHpChange = (newHp: number, actorName: string) => {
+    const newActors = [...currentActors];
+    const actorIndex = newActors.findIndex((actor) => actor.name === actorName);
+
+    if (actorIndex !== -1) {
+      // Ensure stats object exists before updating currHp
+      const actor = newActors[actorIndex];
+      actor.stats = actor.stats || {};
+      actor.stats.currHp = newHp;
+      newActors[actorIndex] = actor;
+      setCurrentActors(newActors);
+    } else {
+      console.error(`No actor found with name: ${actorName}`);
+    }
+  };
+
+  const getActor = () => {
+    if (isHovered)
+      return currentActors.find((actor) => actor.name === isHovered);
+    if (isSelected)
+      return currentActors.find((actor) => actor.name === isSelected);
+    return currentActors[activeActor];
+  };
+
   return (
     <div className="flex h-full">
       <div
@@ -144,6 +168,7 @@ export default function Tracker({ children }) {
                   isActive={index === activeActor}
                   isHovered={actor.name === isHovered}
                   isSelected={actor.name === isSelected}
+                  handleHpChange={(newHp) => handleHpChange(newHp, actor.name)}
                 />
               </div>
             ))}
@@ -189,8 +214,10 @@ export default function Tracker({ children }) {
               }}
             />
             <hr className="invisible mb-16" />
-            <ActorDetails actor={currentActors[0]} />
           </>
+        )}
+        {!isAddActorDisplayed && getActor() !== undefined && (
+          <ActorDetails actor={getActor()} />
         )}
         {children}
       </section>
