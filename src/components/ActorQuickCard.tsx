@@ -9,6 +9,7 @@ const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 interface ActorQuickCardProps {
   actor: Actor;
   index: number;
+  isEncounterActive: boolean;
   isActive: boolean;
   isHovered: boolean;
   isSelected: boolean;
@@ -18,6 +19,7 @@ interface ActorQuickCardProps {
 export default function ActorQuickCard({
   actor,
   index,
+  isEncounterActive,
   isActive,
   isHovered,
   isSelected,
@@ -108,17 +110,19 @@ export default function ActorQuickCard({
           {actor.name}
         </div>
         <div className="flex">
-          <input
-            // className={`${inter.className} text-lg text-slate-800 w-12 text-center mr-4 rounded`}
-            className={`${inter.className} block w-12 text-center mr-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
-            type="text"
-            id="changeHp"
-            name="changeHp"
-            placeholder="HP"
-            value={inputValue}
-            onKeyDown={handleKeyDown}
-            onChange={handleInputChange}
-          />
+          {isEncounterActive && (
+            <input
+              // className={`${inter.className} text-lg text-slate-800 w-12 text-center mr-4 rounded`}
+              className={`${inter.className} block w-12 text-center mr-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
+              type="text"
+              id="changeHp"
+              name="changeHp"
+              placeholder="HP"
+              value={inputValue}
+              onKeyDown={handleKeyDown}
+              onChange={handleInputChange}
+            />
+          )}
           <div>{actor.stats?.currHp && actor.stats?.currHp}</div>
         </div>
       </div>
