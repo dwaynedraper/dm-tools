@@ -27,15 +27,52 @@ export default function ActorQuickCard({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const newHp = parseInt((e.target as HTMLInputElement).value);
+      let newHp;
+      const inputVal = (e.target as HTMLInputElement).value.trim();
+      if (inputVal.startsWith('+')) {
+        const adjustment = parseInt(inputVal.substring(1));
+        newHp = actor.stats?.currHp
+          ? actor.stats.currHp + adjustment
+          : adjustment;
+      } else if (inputVal.startsWith('-')) {
+        const adjustment = parseInt(inputVal.substring(1));
+        newHp = actor.stats?.currHp
+          ? actor.stats.currHp - adjustment
+          : -adjustment;
+      } else {
+        newHp = parseInt(inputVal);
+      }
+
+      // Ensure newHp doesn't exceed maxHp
+      if (actor.stats?.maxHp && newHp > actor.stats.maxHp) {
+        newHp = actor.stats.maxHp;
+      }
+
+      // Ensure newHp is not negative
+      if (newHp < 0) {
+        newHp = 0;
+      }
+
       handleHpChange(newHp);
-      setInputValue(''); // <-- Add this line to clear the input
+      setInputValue(''); // Clear the input
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value); // <-- Add this function to update inputValue on user input
+    setInputValue(e.target.value); // Update inputValue on user input
   };
+
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     const newHp = parseInt((e.target as HTMLInputElement).value);
+  //     handleHpChange(newHp);
+  //     setInputValue(''); // <-- Add this line to clear the input
+  //   }
+  // };
+
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInputValue(e.target.value); // <-- Add this function to update inputValue on user input
+  // };
 
   return (
     <div>
