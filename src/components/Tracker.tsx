@@ -197,8 +197,10 @@ export default function Tracker({ children }) {
               }}
             />
             <hr className="invisible mb-16" />
-            <ActorDetails actor={getActor()} />
           </>
+        )}
+        {!isAddActorDisplayed && getActor() !== undefined && (
+          <ActorDetails actor={getActor()} />
         )}
         {children}
       </section>
