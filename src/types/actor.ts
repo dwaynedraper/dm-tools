@@ -2,6 +2,15 @@ export interface Actor {
   _id?: string;
   friendly?: boolean;
   name: string;
+  description: string;
+  info?: {
+    race: string;
+    class: string;
+    background: string;
+    alignment: string;
+    xp: number;
+    level: number;
+  };
   stats?: {
     currHp?: number;
     maxHp?: number;

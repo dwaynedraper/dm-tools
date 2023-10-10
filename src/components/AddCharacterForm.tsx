@@ -174,7 +174,7 @@ export default function AddActorForm() {
                 htmlFor="init-bonus"
                 className={`block font-medium leading-6 text-white ${quint.className}`}
               >
-                Initiative Bonus
+                Initiative Bonus (DEX modifier)
               </label>
               <div className="mt-2">
                 <input

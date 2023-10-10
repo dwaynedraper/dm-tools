@@ -77,6 +77,8 @@ export default function AddActorForm({
     const formData = new FormData(formRef.current); // Extract form data using FormData API
     const formDataObj = {
       name: '',
+      friendly: false,
+      description: '',
       stats: {
         ac: 0,
         currHp: 0,
@@ -90,6 +92,8 @@ export default function AddActorForm({
     formDataObj.stats.maxHp = String(formData.get('hitPoints'));
     formDataObj.stats.initBonus = String(formData.get('initBonus'));
     formDataObj.name = String(formData.get('name'));
+    formDataObj.friendly = String(formData.get('friendly')) === 'true';
+    formDataObj.description = String(formData.get('description'));
     console.log('formDataObj', formDataObj);
 
     onSubmit(formDataObj);
@@ -201,7 +205,7 @@ export default function AddActorForm({
                 htmlFor="initBonus"
                 className={`block font-medium leading-6 text-white`}
               >
-                Initiative Bonus
+                Initiative Bonus (DEX modifier)
               </label>
               <div className="mt-2">
                 <input

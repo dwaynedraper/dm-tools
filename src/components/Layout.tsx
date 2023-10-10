@@ -79,13 +79,13 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
           className={classNames(
             `flex flex-col h-full pb-4 overflow-y-auto grow gap-y-5 bg-slate-900 ring-1 ring-white/10`,
             {
-              'px-2': !sidebarOpen,
-              'px-6': sidebarOpen,
+              'px-2 pt-2': !sidebarOpen,
+              'px-6 pt-4': sidebarOpen,
             },
           )}
         >
           <div className="z-10 flex flex-col items-center border-b shrink-0 border-cyan-700">
-            <GiDiceTwentyFacesTwenty className="w-12 h-12 text-cyan-500" />
+            <GiDiceTwentyFacesTwenty className="w-12 h-12 mb-2 text-cyan-500" />
             {sidebarOpen && (
               <>
                 <p className={`text-5xl text-cyan-500 ${kaushan.className}`}>
