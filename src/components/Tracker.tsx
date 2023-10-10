@@ -112,6 +112,33 @@ export default function Tracker({ children }) {
   };
 
   const beginEncounter = () => {
+    // Roll initiative for actors if not set
+    const updatedActors = currentActors.map((actor) => {
+      if (actor.stats?.initiative === undefined) {
+        // Assuming a d20 system, feel free to replace with your system's logic
+        const initiativeRoll = Math.floor(Math.random() * 20) + 1;
+        return {
+          ...actor,
+          stats: {
+            ...actor.stats,
+            initiative: initiativeRoll,
+          },
+        };
+      }
+      return actor;
+    });
+
+    // Sort actors by initiative in descending order
+    updatedActors.sort((a, b) => {
+      // Ensure both actors have stats and initiative values before comparing
+      if (a.stats?.initiative && b.stats?.initiative) {
+        return b.stats.initiative - a.stats.initiative;
+      }
+      return 0; // Default case, order remains unchanged
+    });
+
+    // Update the state with the new actors list and set encounter to active
+    setCurrentActors(updatedActors);
     setIsEncounterActive(true);
   };
 
@@ -204,15 +231,6 @@ export default function Tracker({ children }) {
             ))}
         </div>
 
-        {!isEncounterActive && (
-          <Button
-            className={`border-t border-slate-100`}
-            onClick={openAddActorForm}
-          >
-            Add Actor
-          </Button>
-        )}
-
         {isEncounterActive ? (
           <>
             <Button
@@ -226,12 +244,20 @@ export default function Tracker({ children }) {
             </Button>
           </>
         ) : (
-          <Button
-            className={`border-t border-slate-100`}
-            onClick={beginEncounter}
-          >
-            Start Encounter
-          </Button>
+          <>
+            <Button
+              className={`border-t border-slate-100`}
+              onClick={openAddActorForm}
+            >
+              Add Actor
+            </Button>
+            <Button
+              className={`border-t border-slate-100`}
+              onClick={beginEncounter}
+            >
+              Start Encounter
+            </Button>
+          </>
         )}
       </div>
       <section className="w-full h-full p-4 overflow-auto bg-slate-900">

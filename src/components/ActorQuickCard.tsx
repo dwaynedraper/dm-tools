@@ -60,7 +60,9 @@ export default function ActorQuickCard({
 
     if (isEncounterActive && e.key === 'Enter') {
       let newHp: number;
+      // Get the value of the input
       const inputVal = (e.target as HTMLInputElement).value.trim();
+      // If the input starts with a + or -, adjust the hp by that amount
       if (inputVal.startsWith('+')) {
         const adjustment = parseInt(inputVal.substring(1));
         newHp = actor.stats?.currHp
