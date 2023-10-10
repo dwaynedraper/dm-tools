@@ -119,6 +119,27 @@ export default function Tracker({ children }) {
     setIsEncounterActive(false);
   };
 
+  const handleDelete = (id: string) => {
+    const newActors = currentActors.filter((actor) => actor.id !== id);
+    setCurrentActors(newActors);
+  };
+
+  const updateInit = (newInit: number, actorName: string) => {
+    const newActors = [...currentActors];
+    const actorIndex = newActors.findIndex((actor) => actor.name === actorName);
+
+    if (actorIndex !== -1) {
+      // Ensure stats object exists before updating init
+      const actor = newActors[actorIndex];
+      actor.stats = actor.stats || {};
+      actor.stats.initiative = newInit;
+      newActors[actorIndex] = actor;
+      setCurrentActors(newActors);
+    } else {
+      console.error(`No actor found with name: ${actorName}`);
+    }
+  };
+
   const handleHpChange = (newHp: number, actorName: string) => {
     const newActors = [...currentActors];
     const actorIndex = newActors.findIndex((actor) => actor.name === actorName);
@@ -148,7 +169,13 @@ export default function Tracker({ children }) {
       <div
         className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
-        <div className="h-full px-4 pt-24 bg-slate-800 w-96">
+        <div className="h-full px-4 pt-8 bg-slate-800 w-96">
+          <h1 className={`${kaushan.className} text-4xl text-slate-200`}>
+            Initiative Order
+          </h1>
+          <p className="mb-8 text-slate-200">
+            Enter initiative roll without adding your bonus
+          </p>
           {loading && <div>Fetching actors...</div>}
 
           {!loading &&
@@ -170,6 +197,8 @@ export default function Tracker({ children }) {
                   isHovered={actor.name === isHovered}
                   isSelected={actor.name === isSelected}
                   handleHpChange={(newHp) => handleHpChange(newHp, actor.name)}
+                  handleDelete={handleDelete}
+                  handleInitChange={updateInit}
                 />
               </div>
             ))}

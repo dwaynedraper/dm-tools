@@ -9,6 +9,7 @@ export interface Actor {
     ac?: number;
     speed?: number;
     initBonus?: number;
+    initiative?: number;
     proficiency?: number;
     hitDice?: number;
     hitDiceMax?: number;
