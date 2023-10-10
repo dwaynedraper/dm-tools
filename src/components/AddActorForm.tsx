@@ -220,7 +220,7 @@ export default function AddActorForm({
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="country"
+                htmlFor="friendly"
                 className={`block font-medium leading-6 text-white`}
               >
                 Is target friendly?
@@ -231,8 +231,9 @@ export default function AddActorForm({
                   name="friendly"
                   className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
                 >
-                  <option value={'true'}>Yes</option>
-                  <option value={'false'}>No</option>
+                  <option>--- Make selection ---</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
                 </select>
               </div>
             </div>
