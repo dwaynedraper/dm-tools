@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { FaRegTrashCan } from 'react-icons/fa6';
 
 import { Inter, Kaushan_Script } from 'next/font/google';
+import { GiCheckedShield, GiSkullCrossedBones } from 'react-icons/gi';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -109,6 +110,15 @@ export default function ActorQuickCard({
     setInitValue(parseInt(e.target.value)); // Update initValue on user input
   };
 
+  const confirmDelete = (id: string) => {
+    const userConfirmed = window.confirm(
+      'Are you sure you want to delete this actor?',
+    );
+    if (userConfirmed) {
+      handleDelete(id);
+    }
+  };
+
   return (
     <div>
       <div
@@ -124,12 +134,17 @@ export default function ActorQuickCard({
       >
         <div
           className={classNames(
-            `${kaushan.className} text-ellipsis overflow-hidden w-36`,
+            `${kaushan.className} text-ellipsis overflow-hidden w-36 white flex items-center`,
             {
               underline: isActive,
             },
           )}
         >
+          {actor.friendly ? (
+            <GiCheckedShield className="w-4 h-4 mr-1 text-cyan-500" />
+          ) : (
+            <GiSkullCrossedBones className="w-4 h-4 mr-1 text-red-600" />
+          )}
           {actor.name}
         </div>
         <div className="flex items-center">
@@ -184,7 +199,7 @@ export default function ActorQuickCard({
           <FaRegTrashCan
             className="w-4 h-4 ml-2 text-slate-500"
             onClick={() => {
-              handleDelete(actor._id || '');
+              confirmDelete(actor._id || '');
             }}
           />
         </div>
