@@ -1,5 +1,5 @@
 export interface Actor {
-  id: string;
+  _id?: string;
   friendly?: boolean;
   name: string;
   stats?: {

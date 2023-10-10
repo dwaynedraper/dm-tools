@@ -10,7 +10,7 @@ import styles from '@/styles/Tracker.module.scss';
 import { Actor } from '@/types/actor';
 import classNames from 'classnames';
 import { Bungee_Spice, Inter, Kaushan_Script } from 'next/font/google';
-import { Button } from '@/components/base/Button';
+import Button from '@/components/base/Button';
 import ActorDetails from './ActorDetails';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
@@ -21,15 +21,6 @@ interface TrackerProps {
   data: any;
   children: React.ReactNode;
 }
-
-// This will be replaced with the list of characters and monsters in the encounter
-// If the encounter isn't planned, you can add new actors to the list
-// The characters should always be here, and the monsters will be there for planned encounters
-const actors = [
-  { id: '1', name: 'Grendish' },
-  { id: '2', name: 'Three Toes' },
-  { id: '3', name: 'Hand Of Borgen' },
-];
 
 export default function Tracker({ children }) {
   const [currentActors, setCurrentActors] = useState<Actor[]>([]);
@@ -92,7 +83,7 @@ export default function Tracker({ children }) {
     // This is because the encounter is not planned, and we don't want to persist
 
     const newActor = {
-      id: Math.floor(Math.random() * 1000),
+      _id: Math.floor(Math.random() * 1000).toString(),
       ...formDataObj,
     };
     setCurrentActors([...currentActors, newActor]);
@@ -140,14 +131,22 @@ export default function Tracker({ children }) {
     // Update the state with the new actors list and set encounter to active
     setCurrentActors(updatedActors);
     setIsEncounterActive(true);
+    setIsAddActorDisplayed(false);
   };
 
   const endCombat = () => {
     setIsEncounterActive(false);
+    // Cycle through all actors and delete their initiative
+    const updatedActors = currentActors.map((actor) => {
+      if (actor.stats?.initiative) {
+        delete actor.stats.initiative;
+      }
+      return actor;
+    });
   };
 
   const handleDelete = (id: string) => {
-    const newActors = currentActors.filter((actor) => actor.id !== id);
+    const newActors = currentActors.filter((actor) => actor._id !== id);
     setCurrentActors(newActors);
   };
 
@@ -200,8 +199,13 @@ export default function Tracker({ children }) {
           <h1 className={`${kaushan.className} text-4xl text-slate-200`}>
             Initiative Order
           </h1>
-          <p className="mb-8 text-slate-200">
-            Enter initiative roll without adding your bonus
+          <p className="mb-8 text-slate-400">
+            {!isEncounterActive &&
+              'Enter initiative roll without adding your bonus'}
+            {isEncounterActive && 'Enter a number to update to that number'}
+            <br />
+            {isEncounterActive &&
+              'Enter + or - followed by a number to add or subtract'}
           </p>
           {loading && <div>Fetching actors...</div>}
 

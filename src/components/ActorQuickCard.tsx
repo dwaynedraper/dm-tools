@@ -1,10 +1,15 @@
+// React/Next imports
 import React from 'react';
+
+// Component imports
+import Button from '@/components/base/Button';
+
+// Other imports
 import { Actor } from '@/types/actor';
 import classNames from 'classnames';
-import { Inter, Kaushan_Script } from 'next/font/google';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import { Button } from './base/Button';
-import { init } from 'next/dist/compiled/@vercel/og/satori';
+
+import { Inter, Kaushan_Script } from 'next/font/google';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -45,7 +50,11 @@ export default function ActorQuickCard({
 
   const rollInit = () => {
     let newInit = Math.floor(Math.random() * 20) + 1;
-    newInit += actor.stats?.initBonus ? actor.stats.initBonus : 0;
+    // Ensure initBonus is a number before adding to newInit
+    const initBonus = actor.stats?.initBonus
+      ? parseInt(actor.stats.initBonus.toString())
+      : 0;
+    newInit += initBonus;
     handleInitChange(newInit, actor.name);
     setInitValue(0); // Clear the input
   };
@@ -114,9 +123,12 @@ export default function ActorQuickCard({
         )}
       >
         <div
-          className={classNames(`${kaushan.className}   `, {
-            underline: isActive,
-          })}
+          className={classNames(
+            `${kaushan.className} text-ellipsis overflow-hidden w-36`,
+            {
+              underline: isActive,
+            },
+          )}
         >
           {actor.name}
         </div>
@@ -169,7 +181,12 @@ export default function ActorQuickCard({
               </div>
             </>
           )}
-          <FaRegTrashCan className="w-4 h-4 text-slate-500" />
+          <FaRegTrashCan
+            className="w-4 h-4 ml-2 text-slate-500"
+            onClick={() => {
+              handleDelete(actor._id || '');
+            }}
+          />
         </div>
       </div>
     </div>
