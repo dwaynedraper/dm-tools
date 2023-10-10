@@ -124,7 +124,7 @@ export default function ActorQuickCard({
       <div
         key={actor.name}
         className={classNames(
-          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer`,
+          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
           {
             'py-4 border bg-slate-900 text-cyan-500 text-3xl': isActive,
             'py-1 bg-slate-700 border border-cyan-500': isSelected,
