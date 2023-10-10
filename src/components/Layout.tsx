@@ -141,7 +141,7 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
       </div>
       <div className={styles.content}>{children}</div>
       <div className={`h-screen px-2 w-192 bg-slate-800`}>
-        <div className={`h-full overflow-y-scroll py-2 pr-2`}>
+        <div className={`h-full overflow-y-scroll hide-scrollbar py-2 pr-2`}>
           <div className={`${styles.contextItem}`}>
             Real-time Serverless Websocket Chat Placeholder
           </div>
