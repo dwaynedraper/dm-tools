@@ -27,6 +27,7 @@ import {
 import classNames from 'classnames';
 import { gsap } from 'gsap';
 import { BsLayoutTextSidebarReverse } from 'react-icons/bs';
+import { GiDiceTwentyFacesTwenty } from 'react-icons/gi';
 import { IoEarthOutline } from 'react-icons/io5';
 import { LiaDiceD20Solid } from 'react-icons/lia';
 import { RxDashboard } from 'react-icons/rx';
@@ -75,10 +76,16 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
       <div className={sidebarOpen ? `${styles.sidebar}` : `${styles.sidebar}`}>
         <div
           onClick={toggleSidebar}
-          className="flex flex-col h-full px-6 pb-4 overflow-y-auto grow gap-y-5 bg-slate-900 ring-1 ring-white/10"
+          className={classNames(
+            `flex flex-col h-full pb-4 overflow-y-auto grow gap-y-5 bg-slate-900 ring-1 ring-white/10`,
+            {
+              'px-2': !sidebarOpen,
+              'px-6': sidebarOpen,
+            },
+          )}
         >
           <div className="z-10 flex flex-col items-center border-b shrink-0 border-cyan-700">
-            <LiaDiceD20Solid className="w-12 h-12 text-cyan-500" />
+            <GiDiceTwentyFacesTwenty className="w-12 h-12 text-cyan-500" />
             {sidebarOpen && (
               <>
                 <p className={`text-5xl text-cyan-500 ${kaushan.className}`}>

@@ -11,13 +11,13 @@ import {
 } from 'next/font/google';
 
 import styles from '@/styles/AddActorForm.module.scss';
-import { Button } from '@/components/base/Button';
-import FormSpacer12 from '@/components/folder/outer-wrapper/FormSpacer12';
+import Button from '@/components/base/Button';
+import FormSpacer12 from '@/components/forms/outer-wrapper/FormSpacer12';
 
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import FlexSection from './folder/inner-container/FlexSection';
-import BasicSection from './folder/inner-container/BasicSection';
-import Heading1 from './folder/element/Heading1';
+import FlexSection from '@/components/forms/inner-container/FlexSection';
+import BasicSection from '@/components/forms/inner-container/BasicSection';
+import Heading1 from '@/components/forms/element/Heading1';
 
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });

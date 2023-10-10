@@ -1,4 +1,18 @@
+// React/Next imports
 import React, { useEffect, useRef, useState } from 'react';
+
+// Component imports
+import Button from '@/components/base/Button';
+import FormSpacer12 from '@/components/forms/outer-wrapper/FormSpacer12';
+import FlexSection from '@/components/forms/inner-container/FlexSection';
+import BasicSection from '@/components/forms/inner-container/BasicSection';
+import Heading1 from '@/components/forms/element/Heading1';
+
+// Other imports
+import styles from '@/styles/AddActorForm.module.scss';
+import * as Yup from 'yup';
+import { Actor } from '@/types/actor';
+
 import {
   Aladin,
   Almendra,
@@ -12,10 +26,6 @@ import {
   Racing_Sans_One,
 } from 'next/font/google';
 
-import styles from '@/styles/AddActorForm.module.scss';
-import { Button } from '@/components/base/Button';
-import FormSpacer12 from '@/components/folder/outer-wrapper/FormSpacer12';
-
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
 const amarante = Amarante({ weight: '400', subsets: ['latin'] });
@@ -27,16 +37,24 @@ const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 const quint = Quintessential({ weight: '400', subsets: ['latin'] });
 const racing = Racing_Sans_One({ weight: '400', subsets: ['latin'] });
 
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import FlexSection from './folder/inner-container/FlexSection';
-import BasicSection from './folder/inner-container/BasicSection';
-import Heading1 from './folder/element/Heading1';
-import { Actor } from '@/types/actor';
-
 interface AddActorFormProps {
   onSubmit: (formDataObj: any) => void;
   onCancel: () => void;
 }
+
+const validationSchema = Yup.object({
+  name: Yup.string().min(3).max(36).trim().required('Required'),
+  armorClass: Yup.number()
+    .min(7)
+    .max(30)
+    .required('Required')
+    .positive()
+    .integer(),
+  hitPoints: Yup.number().required('Required').positive().integer(),
+  initBonus: Yup.number().required('Required').integer(),
+  friendly: Yup.boolean(),
+  numActors: Yup.number().positive().integer(),
+});
 
 /**
  * AddActorForm allows the user to add a new actor to the encounter.
@@ -58,28 +76,20 @@ export default function AddActorForm({
 
     const formData = new FormData(formRef.current); // Extract form data using FormData API
     const formDataObj = {
-      id: '',
       name: '',
       stats: {
         ac: 0,
         currHp: 0,
         maxHp: 0,
         initBonus: 0,
-        initiative: '',
       } as any,
     }; // Object to store form data as key-value pairs
 
-    formDataObj.id = Math.floor(Math.random() * 1000).toString();
     formDataObj.stats.ac = String(formData.get('armorClass'));
     formDataObj.stats.currHp = String(formData.get('hitPoints'));
     formDataObj.stats.maxHp = String(formData.get('hitPoints'));
     formDataObj.stats.initBonus = String(formData.get('initBonus'));
-    formDataObj.stats.initiative = String(formData.get('initiative'));
     formDataObj.name = String(formData.get('name'));
-    // Convert FormData to an object
-    // formData.forEach((value, key) => {
-    //   formDataObj[key] = value;
-    // });
     console.log('formDataObj', formDataObj);
 
     onSubmit(formDataObj);
@@ -148,15 +158,6 @@ export default function AddActorForm({
               </div>
             </div>
           </div>
-          {/* </BasicSection> */}
-          {/* --------- Stats ----------------------------------------------------------------- */}
-          {/* <BasicSection> */}
-          {/* <h2 className={`text-lg font-semibold text-white`}>
-            Stats
-          </h2>
-          <p className="mt-1 leading-6 text-gray-100">
-            Use a permanent address where you can receive mail.
-          </p> */}
 
           <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
@@ -236,22 +237,21 @@ export default function AddActorForm({
       </FormSpacer12>
 
       <div className="flex items-center justify-end mt-6 gap-x-6">
-        <div className="flex align-middle sm:col-span-1">
+        <div className="flex items-center space-x-2 sm:col-span-3">
           <label
-            htmlFor="country"
+            htmlFor="numActors"
             className={`block font-medium leading-6 text-white`}
           >
-            Is target friendly?
+            # to create
           </label>
-          <div className="mt-2">
-            <select
-              id="friendly"
-              name="friendly"
-              className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
-            >
-              <option value={'true'}>Yes</option>
-              <option value={'false'}>No</option>
-            </select>
+          <div className="">
+            <input
+              id="numActors"
+              name="numActors"
+              type="text"
+              required
+              className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+            />
           </div>
         </div>
         <Button

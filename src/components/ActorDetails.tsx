@@ -21,7 +21,7 @@ export default function ActorDetails({ actor }) {
       <div className={`${inter.className} flex justify-between`}>
         <div>Initiative</div>
         <div>
-          {actor.stats.initiative ? actor.stats.initiative : 14} (
+          {actor.stats.initiative && actor.stats.initiative} (
           {actor.stats.initBonus} bonus)
         </div>
       </div>

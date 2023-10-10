@@ -41,7 +41,7 @@ export interface ButtonProps
   rounded?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
   className,
   intent,
   size,
@@ -55,16 +55,14 @@ export const Button: React.FC<ButtonProps> = ({
   />
 );
 
+export default Button;
+
 // TODO: Finish adding the remaining props from the original Button component, as seen below:
 {
   /*
   <button
     type="submit"
-    className="rounded-md bg-cyan-600 
-    border border-cyan-600 
-    px-3 py-2 text-sm 
-    font-semibold text-white 
-    shadow-sm hover:bg-indigo-400 "
+    className="px-3 py-2 text-sm font-semibold text-white border rounded-md shadow-sm bg-cyan-600 border-cyan-600 hover:bg-indigo-400 "
   >
     Save
   </button>
@@ -73,7 +71,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   <button
     type="button"
-    className="text-sm font-semibold text-white border border-red-600 rounded-md px-3 py-2 box-border"
+    className="box-border px-3 py-2 text-sm font-semibold text-white border border-red-600 rounded-md"
   >
     Cancel
   </button>
