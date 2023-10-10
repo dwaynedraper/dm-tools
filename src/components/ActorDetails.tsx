@@ -43,7 +43,7 @@ export default function ActorDetails({ actor }) {
         <hr className="my-4" />
         <div className="flex">
           <div className="flex flex-col w-1/2">
-            <div className="flex items-center">
+            <div className="flex items-center mb-2">
               <GiFocusedLightning className="w-6 h-6 mr-8" />
               <div>
                 {actor.stats.initiative && actor.stats.initiative} (
@@ -66,7 +66,7 @@ export default function ActorDetails({ actor }) {
             </div>
           </div>
           <div className="flex flex-col w-1/2">
-            <div className="flex items-center">
+            <div className="flex items-center mb-2">
               <GiHealthNormal className="w-6 h-6 mr-8" />
               <div>
                 {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (
