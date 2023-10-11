@@ -46,9 +46,11 @@ export default function ActorDetails({ actor }) {
             <div className="flex items-center mb-2">
               <GiFocusedLightning className="w-6 h-6 mr-8" />
               <div>
-                {actor.stats.initiative && actor.stats.initiative} (
-                {actor.stats.initiative - actor.stats.initBonus}&nbsp;+&nbsp;
-                {actor.stats.initBonus} DEX)
+                {actor.stats.initiative && actor.stats.initiative} (&nbsp;
+                {actor.stats.initiative &&
+                  actor.stats.initiative - actor.stats.initBonus}
+                &nbsp;+&nbsp;
+                {actor.stats.initBonus} DEX&nbsp;)
               </div>
             </div>
             <div className="flex items-center">
@@ -69,8 +71,9 @@ export default function ActorDetails({ actor }) {
             <div className="flex items-center mb-2">
               <GiHealthNormal className="w-6 h-6 mr-8" />
               <div>
-                {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (
-                {((actor.stats.currHp / actor.stats.maxHp) * 100).toFixed(1)}%)
+                {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (&nbsp;
+                {((actor.stats.currHp / actor.stats.maxHp) * 100).toFixed(1)}
+                %&nbsp;)
               </div>
             </div>
             <div className="flex items-center">

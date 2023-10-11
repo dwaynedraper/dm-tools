@@ -119,6 +119,10 @@ export default function ActorQuickCard({
     }
   };
 
+  const handleFocus = (event) => {
+    event.target.select();
+  };
+
   return (
     <div>
       <div
@@ -153,9 +157,8 @@ export default function ActorQuickCard({
               <label htmlFor="setInit" className="text-base">
                 Init:
               </label>
-              <div className="flex flex-col items-center">
+              <div className="flex items-center">
                 <input
-                  // className={`${inter.className} text-lg text-slate-800 w-12 text-center mr-4 rounded`}
                   className={`${inter.className} block w-12 text-center mx-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
                   type="text"
                   id="setInit"
@@ -164,6 +167,7 @@ export default function ActorQuickCard({
                   value={initValue}
                   onKeyDown={handleKeyDown}
                   onChange={updateInit}
+                  onFocus={handleFocus}
                 />
                 {initValue !== 0 && (
                   <Button size={'small'} rounded={true} onClick={submitInit}>

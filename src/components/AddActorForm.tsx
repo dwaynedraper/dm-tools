@@ -75,28 +75,35 @@ export default function AddActorForm({
     if (!formRef.current) return; // Guard clause
 
     const formData = new FormData(formRef.current); // Extract form data using FormData API
-    const formDataObj = {
-      name: '',
-      friendly: false,
-      description: '',
-      stats: {
-        ac: 0,
-        currHp: 0,
-        maxHp: 0,
-        initBonus: 0,
-      } as any,
-    }; // Object to store form data as key-value pairs
+    const numActors = parseInt(String(formData.get('numActors')) || '1', 10); // Get the number of actors to create
+    const baseName = formData.get('name'); // Get the base name of the actor
 
-    formDataObj.stats.ac = String(formData.get('armorClass'));
-    formDataObj.stats.currHp = String(formData.get('hitPoints'));
-    formDataObj.stats.maxHp = String(formData.get('hitPoints'));
-    formDataObj.stats.initBonus = String(formData.get('initBonus'));
-    formDataObj.name = String(formData.get('name'));
-    formDataObj.friendly = String(formData.get('friendly')) === 'true';
-    formDataObj.description = String(formData.get('description'));
-    console.log('formDataObj', formDataObj);
+    // Verify numActors is a valid number
+    if (isNaN(numActors) || numActors <= 0) {
+      console.error('Invalid number of actors specified');
+      return;
+    }
 
-    onSubmit(formDataObj);
+    const actorsArray: any = []; // Array to hold the actors
+
+    // Iterate over the number of actors specified
+    for (let i = 1; i <= numActors; i++) {
+      const actorName = `${baseName} ${i}`; // Append the iterator to the actor name
+      const actorData = {
+        name: actorName,
+        friendly: formData.get('friendly') === 'true',
+        description: formData.get('description') ?? '',
+        stats: {
+          ac: parseInt(String(formData.get('armorClass') ?? '0'), 10),
+          currHp: parseInt(String(formData.get('hitPoints') ?? '0'), 10),
+          maxHp: parseInt(String(formData.get('hitPoints') ?? '0'), 10),
+          initBonus: parseInt(String(formData.get('initBonus') ?? '0'), 10),
+        },
+      };
+
+      actorsArray.push(actorData); // Add the actor to the actorsArray
+    }
+    onSubmit(actorsArray); // Pass the array of actors to onSubmit
   };
 
   return (
@@ -113,15 +120,6 @@ export default function AddActorForm({
 
         {/* --------- Basic Info ----------------------------------------------------------------- */}
         <BasicSection>
-          {/* <h2
-            className={`text-2xl text-yellow-400 font-semibold text-white`}
-          >
-            Basic Info
-          </h2>
-          <p className="mb-8 leading-6 text-gray-400">
-            The actor&apos;s basic information.
-          </p> */}
-
           <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <label
