@@ -1,75 +1,81 @@
+import { Condition } from './conditions';
+
 export interface Actor {
   _id?: string;
   friendly?: boolean;
   name: string;
-  description: string;
+  description?: string;
   info?: {
-    race: string;
-    class: string;
-    background: string;
-    alignment: string;
-    xp: number;
-    level: number;
+    race?: string;
+    class?: string;
+    bg?: string;
+    alignment?: string;
   };
   stats?: {
-    currHp?: number;
     maxHp?: number;
     tempHp?: number;
     ac?: number;
     speed?: number;
-    initBonus?: number;
-    initiative?: number;
-    proficiency?: number;
+    prof?: number;
     hitDice?: number;
     hitDiceMax?: number;
     hitDiceUsed?: number;
-    deathSaves?: {
-      successes?: number;
-      failures?: number;
-    };
+    xp?: number;
+    level?: number;
+    inspired?: boolean;
+    currHp?: number;
+    initBonus?: number;
+    initiative?: number;
   };
-  abilities?: {
-    str?: number;
-    dex?: number;
-    con?: number;
-    int?: number;
-    wis?: number;
-    cha?: number;
+  deathSaves?: {
+    successes?: number;
+    failures?: number;
   };
-  savingThrows?: {
-    str?: number;
-    dex?: number;
-    con?: number;
-    int?: number;
-    wis?: number;
-    cha?: number;
+  str: {
+    score?: number;
+    prof?: number;
+    mod?: number;
   };
-  modifiers?: {
-    str?: number;
-    dex?: number;
-    con?: number;
-    int?: number;
-    wis?: number;
-    cha?: number;
-    strSave?: number;
-    dexSave?: number;
-    conSave?: number;
-    intSave?: number;
-    wisSave?: number;
-    chaSave?: number;
+  dex: {
+    score?: number;
+    prof?: number;
+    mod?: number;
   };
-  proficiencies?: {
+  con: {
+    score?: number;
+    prof?: number;
+    mod?: number;
+  };
+  int: {
+    score?: number;
+    prof?: number;
+    mod?: number;
+  };
+  wis: {
+    score?: number;
+    prof?: number;
+    mod?: number;
+  };
+  cha: {
+    score?: number;
+    prof?: number;
+    mod?: number;
+  };
+  prof?: {
+    // proficiencies
     armor?: string[];
     weapons?: string[];
     tools?: string[];
     skills?: string[];
-    languages?: string[];
+    lang?: string[];
   };
-  resistances?: {
+  res?: {
+    // resistances
     damage?: string[];
-    condition?: string[];
+    condition?: Condition[];
   };
-  immunities?: {
+  imm?: {
+    // immunities
     damage?: string[];
     condition?: string[];
   };
@@ -78,12 +84,17 @@ export interface Actor {
     darkvision?: number;
   };
   activeConditions?: ActiveCondition[];
+  isConcentrating?: boolean;
+  concentrationTargets?: string[];
 }
 
 export interface ActiveCondition {
-  targetedProperties?: {
-    [key: string]: any;
-  };
-  whenConditionClears?: 'begin' | 'end';
+  condition: Condition;
+  requiresConcentration?: boolean;
+  concentratingActor?: string;
   turnsRemaining?: number;
+  targets?: string[];
 }
+
+// If isConcentrating is broken (made false by interruption),
+// go through concentrationTargets and remove all conditions caused by this actor.
