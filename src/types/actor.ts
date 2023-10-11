@@ -4,12 +4,12 @@ export interface Actor {
   _id?: string;
   friendly?: boolean;
   name: string;
-  description: string;
+  description?: string;
   info?: {
-    race: string;
-    class: string;
-    bg: string;
-    alignment: string;
+    race?: string;
+    class?: string;
+    bg?: string;
+    alignment?: string;
   };
   stats?: {
     maxHp?: number;
@@ -20,8 +20,8 @@ export interface Actor {
     hitDice?: number;
     hitDiceMax?: number;
     hitDiceUsed?: number;
-    xp: number;
-    level: number;
+    xp?: number;
+    level?: number;
     inspired?: boolean;
     currHp?: number;
     initBonus?: number;

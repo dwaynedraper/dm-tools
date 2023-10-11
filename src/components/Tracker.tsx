@@ -222,7 +222,7 @@ export default function Tracker({ children }) {
       return currentActors.find((actor) => actor.name === isHovered);
     if (isSelected)
       return currentActors.find((actor) => actor.name === isSelected);
-    return currentActors[activeActor];
+    if (activeActor !== null) return currentActors[activeActor];
   };
 
   return (
