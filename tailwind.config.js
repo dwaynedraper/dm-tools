@@ -25,7 +25,7 @@ module.exports = {
       },
       boxShadow: {
         '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-      }
+      },
     },
   },
   plugins: [function ({ addUtilities }) {
@@ -39,5 +39,5 @@ module.exports = {
       },
     }
     addUtilities(newUtilities, ['responsive', 'hover'])
-  }],
+  }, require('tailwind-scrollbar')({ nocompatible: true })],
 }

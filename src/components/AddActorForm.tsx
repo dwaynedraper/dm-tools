@@ -258,6 +258,7 @@ export default function AddActorForm({
           </div>
         </div>
         <Button
+          intent={'secondary'}
           rounded={true}
           onClick={() => {
             onCancel();

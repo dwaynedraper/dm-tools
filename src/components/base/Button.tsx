@@ -7,15 +7,14 @@ const button = cva('button', {
       primary: [
         'bg-cyan-800',
         'text-white',
-        'border-transparent',
         'hover:bg-cyan-500',
         'font-semibold',
       ],
       secondary: [
-        'bg-white',
-        'text-gray-800',
+        'bg-orange-700',
+        'text-slate-200',
         'border-gray-400',
-        'hover:bg-gray-100',
+        'hover:bg-orange-500',
       ],
     },
     size: {

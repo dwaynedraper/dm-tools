@@ -138,7 +138,7 @@ export default function ActorQuickCard({
       >
         <div
           className={classNames(
-            `${kaushan.className} text-ellipsis overflow-hidden w-36 white flex items-center`,
+            `${kaushan.className} overflow-hidden text-ellipsis w-36 white flex items-center`,
             {
               underline: isActive,
             },
