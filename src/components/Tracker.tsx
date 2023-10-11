@@ -78,15 +78,17 @@ export default function Tracker({ children }) {
     setIsAddActorDisplayed(true);
   };
 
-  const handleAddActor = async (formDataObj: any) => {
-    // Add actor to the encounter's state, but do not persist to the database
-    // This is because the encounter is not planned, and we don't want to persist
-
-    const newActor = {
+  const handleAddActors = async (formDataObjArray: any[]) => {
+    // Generate an array of new actors with unique IDs and the provided data
+    const newActors = formDataObjArray.map((formDataObj) => ({
       _id: Math.floor(Math.random() * 1000).toString(),
       ...formDataObj,
-    };
-    setCurrentActors([...currentActors, newActor]);
+    }));
+
+    // Merge the new actors with the existing actors and update the state
+    setCurrentActors((prevActors) => [...prevActors, ...newActors]);
+
+    // Hide the Add Actor form
     setIsAddActorDisplayed(false);
   };
 
@@ -268,7 +270,7 @@ export default function Tracker({ children }) {
         {isAddActorDisplayed && (
           <>
             <AddActorForm
-              onSubmit={handleAddActor}
+              onSubmit={handleAddActors}
               onCancel={() => {
                 setIsAddActorDisplayed(false);
               }}
