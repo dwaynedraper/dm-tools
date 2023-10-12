@@ -21,7 +21,7 @@ export default function ActorDetails({ actor }) {
   console.log('actor', actor);
   return (
     <>
-      <div className="p-8 rounded bg-slate-700">
+      <div className="max-w-4xl p-8 rounded shadow bg-slate-700 shadow-cyan-500 hover:shadow-lg hover:shadow-cyan-500">
         <div className="flex">
           <div
             className={classNames(
@@ -33,11 +33,17 @@ export default function ActorDetails({ actor }) {
             )}
           >
             <img
-              className="w-16 h-16 mx-auto border-2 rounded-full border-slate-200"
+              className="w-24 h-24 mx-auto border-2 rounded-full border-slate-200"
               src={'/human_fighter.webp'}
               alt=""
             />
             {actor.name}
+            &nbsp;
+            {actor.info?.race && actor.info?.class && '-'}
+            &nbsp;
+            {actor.info?.race &&
+              actor.info?.class &&
+              actor.info.race + ' ' + actor.info.class}
           </div>
         </div>
         <hr className="my-4" />
