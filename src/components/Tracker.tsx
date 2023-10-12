@@ -282,9 +282,10 @@ export default function Tracker({ children }) {
           {!isEncounterActive && currentActors.length > 5 && (
             <Button
               rounded={true}
-              className={`w-full self-center mb-8`}
+              className={`w-full self-center mb-8 flex items-center justify-center`}
               onClick={openAddActorForm}
             >
+              <AiOutlineUserAdd className="w-8 h-8 mr-4" />
               Add Actor
             </Button>
           )}

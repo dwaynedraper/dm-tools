@@ -141,6 +141,7 @@ export default function ActorQuickCard({
             `${kaushan.className} overflow-hidden text-ellipsis w-36 white flex items-center`,
             {
               underline: isActive,
+              'text-red-600': actor.stats?.currHp === 0,
             },
           )}
         >

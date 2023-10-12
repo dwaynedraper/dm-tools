@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout';
+import Layout from '@/components/layout/Layout';
 import DynamicForm from '@/components/DynamicForm copy';
 import React from 'react';
 

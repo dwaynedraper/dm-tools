@@ -9,7 +9,6 @@ import BasicSection from '@/components/forms/inner-container/BasicSection';
 import Heading1 from '@/components/forms/element/Heading1';
 
 // Other imports
-import styles from '@/styles/AddActorForm.module.scss';
 import * as Yup from 'yup';
 import { Actor } from '@/types/actor';
 
@@ -108,7 +107,7 @@ export default function AddActorForm({
 
   return (
     <form
-      className={`${styles.addActor}`}
+      className={`max-w-4xl p-8 rounded shadow bg-slate-700 shadow-cyan-500 hover:shadow-lg hover:shadow-cyan-500`}
       onSubmit={handleSubmit}
       ref={formRef}
     >
