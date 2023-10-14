@@ -23,6 +23,7 @@ import {
   Quintessential,
   Racing_Sans_One,
 } from 'next/font/google';
+import generateAdjective from '@/utils/adjectiveGenerator';
 
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
@@ -85,7 +86,8 @@ export default function AddActorForm({
 
     // Iterate over the number of actors specified
     for (let i = 1; i <= numActors; i++) {
-      const actorName = `${baseName} ${i}`; // Append the iterator to the actor name
+      const adj = generateAdjective(); // Generate a random adjective
+      const actorName = `${adj} ${baseName}`; // Append the iterator to the actor name
       const actorData = {
         name: actorName,
         friendly: formData.get('friendly') === 'true',

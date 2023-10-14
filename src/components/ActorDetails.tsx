@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Actor } from '@/types/actor';
 import { Inter, Kaushan_Script } from 'next/font/google';
 import {
@@ -9,6 +9,11 @@ import {
   GiSkullCrossedBones,
 } from 'react-icons/gi';
 import classNames from 'classnames';
+import Button from './base/Button';
+import ConditionSelect from '@/components/ConditionSelect';
+import ColorSelect from '@/components/ColorSelect';
+import ColorBadge from '@/components/ColorBadge';
+import { Color } from '@/types/colors';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -17,7 +22,30 @@ interface ActorDetailsProps {
   actor: Actor;
 }
 
-export default function ActorDetails({ actor }) {
+interface ConditionObj {
+  condition: string;
+  color: string;
+}
+
+export default function ActorDetails({
+  actor,
+}: ActorDetailsProps): React.ReactElement {
+  const [selectedCondition, setSelectedCondition] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [activeConditions, setActiveConditions] = useState<ConditionObj[]>([]);
+
+  // Handler for the "Add Condition" button
+  const handleAddCondition = () => {
+    if (selectedCondition && selectedColor) {
+      setActiveConditions([
+        ...activeConditions,
+        { condition: selectedCondition, color: selectedColor },
+      ]);
+      setSelectedCondition(''); // Reset selected condition and color
+      setSelectedColor('');
+    }
+  };
+
   console.log('actor', actor);
   return (
     <>
@@ -47,7 +75,22 @@ export default function ActorDetails({ actor }) {
           </div>
         </div>
         <hr className="my-4" />
-        <div className="flex">
+        <div className="px-4">
+          <div className={`${kaushan.className} text-3xl mb-4`}>
+            Active Conditions
+          </div>
+          <div className="flex flex-wrap">
+            {activeConditions.map((conditionObj, index) => (
+              <ColorBadge
+                key={index}
+                condition={conditionObj.condition}
+                cardColor={conditionObj.color}
+              />
+            ))}
+          </div>
+        </div>
+        <hr className="my-4" />
+        <div className="flex p-4">
           <div className="flex flex-col w-1/2">
             <div className="flex items-center mb-2">
               <GiFocusedLightning className="w-6 h-6 mr-8" />
@@ -89,7 +132,22 @@ export default function ActorDetails({ actor }) {
           </div>
         </div>
         <hr className="my-4" />
-        <div>{actor.description && actor.description}</div>
+        <div className="px-4">{actor.description && actor.description}</div>
+        <hr className="my-4" />
+        <div className="flex items-center p-4">
+          <ConditionSelect
+            value={selectedCondition}
+            onChange={setSelectedCondition}
+          />
+          <ColorSelect value={selectedColor} onChange={setSelectedColor} />
+          <Button
+            rounded={true}
+            className="whitespace-nowrap"
+            onClick={handleAddCondition}
+          >
+            Add Condition
+          </Button>
+        </div>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 // React/Next imports
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAblyChat } from '@/hooks/useAblyChat';
 
 // Component imports
 import Button from '@/components/base/Button';
@@ -40,6 +41,7 @@ export default function ActorQuickCard({
 }: ActorQuickCardProps) {
   const [hpValue, setHpValue] = React.useState('');
   const [initValue, setInitValue] = React.useState(0);
+  const { sendMessage } = useAblyChat();
 
   const submitInit = () => {
     handleInitChange(
@@ -58,6 +60,17 @@ export default function ActorQuickCard({
     newInit += initBonus;
     handleInitChange(newInit, actor.name);
     setInitValue(0); // Clear the input
+    sendMessage(
+      `${actor.name} rolled a ${newInit} for initiative! ${
+        newInit - actor.stats!.initBonus!
+      } + ${actor.stats!.initBonus} ${
+        newInit > 20
+          ? 'Critical Success!'
+          : newInit === 1
+          ? 'Critical Failure!'
+          : ''
+      }`,
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -128,7 +141,7 @@ export default function ActorQuickCard({
       <div
         key={actor.name}
         className={classNames(
-          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
+          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
           {
             'py-4 border bg-slate-900 text-cyan-500 text-3xl': isActive,
             'py-1 bg-slate-700 border border-cyan-500': isSelected,

@@ -41,7 +41,7 @@ const Party = () => {
         {party.map((person) => (
           <li
             key={person.name}
-            className="p-4 cursor-pointer rounded-2xl bg-slate-900/20 hover:shadow-lg hover:shadow-teal-500"
+            className="p-4 cursor-pointer rounded-xl bg-slate-900/20 hover:shadow-lg hover:shadow-teal-500"
           >
             <img
               className="mx-auto rounded-full shadow-lgw-36 h-36 shadow-cyan-300"
@@ -54,7 +54,7 @@ const Party = () => {
             <p className="text-sm leading-6 text-slate-400">{person.role}</p>
           </li>
         ))}
-        <li className="p-4 cursor-pointer rounded-2xl bg-slate-900/20 hover:shadow-lg hover:shadow-teal-500">
+        <li className="p-4 cursor-pointer rounded-xl bg-slate-900/20 hover:shadow-lg hover:shadow-teal-500">
           <IoAddCircleOutline className="rounded-full cursor-pointer h-36 w-36 hover:shadow-lg hover:shadow-teal-500" />
         </li>
       </ul>

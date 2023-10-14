@@ -15,7 +15,11 @@ import Button from '@/components/base/Button';
 import ActorDetails from './ActorDetails';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 import { GiDiceTwentyFacesTwenty, GiCrossedSwords } from 'react-icons/gi';
-import { AiOutlineUserAdd, AiOutlineCloseSquare } from 'react-icons/ai';
+import {
+  AiOutlineUserAdd,
+  AiOutlineCloseSquare,
+  AiOutlineClose,
+} from 'react-icons/ai';
 import { FaStop } from 'react-icons/fa';
 import MyDialog from '@/components/headless/MyDialog';
 
@@ -23,11 +27,14 @@ const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
 interface TrackerProps {
-  data: any;
+  className?: string;
   children: React.ReactNode;
 }
 
-export default function Tracker({ children }) {
+export default function Tracker({
+  children,
+  className,
+}: TrackerProps): React.ReactElement {
   const [currentActors, setCurrentActors] = useState<Actor[]>([]);
   const [isAddActorDisplayed, setIsAddActorDisplayed] = useState(false);
   const [isEncounterActive, setIsEncounterActive] = useState(false);
@@ -230,11 +237,11 @@ export default function Tracker({ children }) {
   };
 
   return (
-    <div className="relative flex h-full">
+    <div className={`relative flex h-full ${className}`}>
       <div
         className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
-        <div className="flex flex-col h-full px-4 pt-8 overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded bg-slate-800 w-96">
+        <div className="flex flex-col h-full px-4 pt-8 overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded bg-slate-700 w-96">
           <MyDialog
             className="absolute inset-0 z-10 flex items-center justify-center"
             isOpen={showModal}
@@ -328,14 +335,14 @@ export default function Tracker({ children }) {
           <>
             <div className="flex">
               <Button
-                className={`border-t border-r w-1/2 border-slate-100 flex items-center `}
+                className={`w-1/2 border-slate-100 flex items-center `}
                 onClick={reverseActors}
               >
                 <HiArrowLongLeft className="w-8 h-8 mr-4" />
                 Go Back
               </Button>
               <Button
-                className={`border-t w-1/2 border-slate-100 flex items-center justify-end bg-green-700`}
+                className={` w-1/2 border-slate-100 flex items-center justify-end bg-green-700`}
                 onClick={cycleActors}
               >
                 End Turn
@@ -343,11 +350,11 @@ export default function Tracker({ children }) {
               </Button>
             </div>
             <Button
-              className={`border-t border-slate-100 flex items-center justify-center`}
+              className={` border-slate-100 flex items-center justify-center`}
               intent={'secondary'}
               onClick={endCombat}
             >
-              <FaStop className="w-8 h-8 mr-4" />
+              <AiOutlineClose className="w-8 h-8 mr-4" />
               End Combat
             </Button>
           </>
@@ -371,7 +378,7 @@ export default function Tracker({ children }) {
           </>
         )}
       </div>
-      <section className="w-full h-full p-4 overflow-auto bg-slate-900">
+      <section className="flex flex-col justify-between w-full h-full p-4 overflow-auto bg-slate-900">
         {isAddActorDisplayed && (
           <>
             <AddActorForm
@@ -386,7 +393,7 @@ export default function Tracker({ children }) {
         {!isAddActorDisplayed && getActor() !== undefined && (
           <ActorDetails actor={getActor()} />
         )}
-        {children}
+        <div className="justify-self-end">{children}</div>
       </section>
     </div>
   );
