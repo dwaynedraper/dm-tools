@@ -4,21 +4,22 @@ import React, { useEffect, useState } from 'react';
 // Component imports
 import AddActorForm from '@/components/AddActorForm';
 import ActorQuickCard from '@/components/ActorQuickCard';
+import { Dialog } from '@headlessui/react';
 
 // Other imports
 import styles from '@/styles/Tracker.module.scss';
 import { Actor } from '@/types/actor';
 import classNames from 'classnames';
-import { Bungee_Spice, Inter, Kaushan_Script } from 'next/font/google';
+import { Inter, Kaushan_Script } from 'next/font/google';
 import Button from '@/components/base/Button';
 import ActorDetails from './ActorDetails';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 import { GiDiceTwentyFacesTwenty, GiCrossedSwords } from 'react-icons/gi';
 import { AiOutlineUserAdd, AiOutlineCloseSquare } from 'react-icons/ai';
 import { FaStop } from 'react-icons/fa';
+import MyDialog from '@/components/headless/MyDialog';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
-const spice = Bungee_Spice({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
 interface TrackerProps {
@@ -28,20 +29,17 @@ interface TrackerProps {
 
 export default function Tracker({ children }) {
   const [currentActors, setCurrentActors] = useState<Actor[]>([]);
-  const [data, setData] = React.useState<any[]>([]);
   const [isAddActorDisplayed, setIsAddActorDisplayed] = useState(false);
   const [isEncounterActive, setIsEncounterActive] = useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [sorted, setSorted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   /**
    * State for the button's active, hovered, and selected states
-   * isActive: It is this actor's turn
+   * activeActor: The index of the current actor in the initiative order
    * isHovered: The user is hovering over this actor (handle CSS with hover:property)
    * isSelected: The user has selected this actor by clicking
-   * The hovered and selected items change the displayed component in <section> for main content
-   * isHovered will temporarily change the component
-   * isSelected is what component shows when none are hovered
    */
   const [activeActor, setActiveActor] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState('');
@@ -66,10 +64,10 @@ export default function Tracker({ children }) {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
+  // Actor related methods
   const cycleActors = () => {
     if (activeActor === currentActors.length - 1 || activeActor === null) {
       setActiveActor(0);
@@ -77,7 +75,6 @@ export default function Tracker({ children }) {
       setActiveActor(activeActor + 1);
     }
   };
-
   const reverseActors = () => {
     if (activeActor === null) return;
     if (activeActor === 0) {
@@ -86,11 +83,9 @@ export default function Tracker({ children }) {
       setActiveActor(activeActor - 1);
     }
   };
-
   const openAddActorForm = () => {
     setIsAddActorDisplayed(true);
   };
-
   const handleAddActors = async (formDataObjArray: any[]) => {
     // Generate an array of new actors with unique IDs and the provided data
     const newActors = formDataObjArray.map((formDataObj) => ({
@@ -104,20 +99,27 @@ export default function Tracker({ children }) {
     // Hide the Add Actor form
     setIsAddActorDisplayed(false);
   };
-
-  const setHovered = (actorName: string) => {
-    setIsHovered(actorName);
+  const handleDelete = (id: string) => {
+    const newActors = currentActors.filter((actor) => actor._id !== id);
+    setCurrentActors(newActors);
   };
 
+  // ActorQuickCard methods
   const setSelected = (actorName: string) => {
     setIsSelected(actorName);
   };
-
+  const setHovered = (actorName: string) => {
+    setIsHovered(actorName);
+  };
   const unsetHovered = () => {
     setIsHovered('');
   };
 
   const beginEncounter = () => {
+    if (isAddActorDisplayed) {
+      setShowCancelModal(true);
+      return;
+    }
     // Roll initiative for actors if not set
     const updatedActors = currentActors.map((actor) => {
       if (actor.stats?.initiative === undefined) {
@@ -143,7 +145,7 @@ export default function Tracker({ children }) {
       return 0; // Default case, order remains unchanged
     });
 
-    // Update the state with the new actors list and set encounter to active
+    // Update the state with the sorted actors list and set encounter to active
     setCurrentActors(updatedActors);
     setActiveActor(0);
     setIsEncounterActive(true);
@@ -178,11 +180,13 @@ export default function Tracker({ children }) {
       }
       return actor;
     });
+    setCurrentActors(updatedActors);
+    setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    const newActors = currentActors.filter((actor) => actor._id !== id);
-    setCurrentActors(newActors);
+  const clearEnemies = () => {
+    const friendlyActors = currentActors.filter((actor) => actor.friendly);
+    setCurrentActors(friendlyActors);
   };
 
   const updateInit = (newInit: number, actorName: string) => {
@@ -226,11 +230,40 @@ export default function Tracker({ children }) {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="relative flex h-full">
       <div
         className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
         <div className="flex flex-col h-full px-4 pt-8 overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded bg-slate-800 w-96">
+          <MyDialog
+            className="absolute inset-0 z-10 flex items-center justify-center"
+            isOpen={showModal}
+            title="Clear Encounter?"
+            description="Would you like to clear all enemies from the encounter?"
+            confirmText="Clear Enemies"
+            cancelText="No"
+            onConfirm={() => {
+              clearEnemies();
+              setShowModal(false);
+            }}
+            onCancel={() => setShowModal(false)}
+            onClose={() => setShowModal(false)}
+          />
+          <MyDialog
+            className="absolute inset-0 z-10 flex items-center justify-center"
+            isOpen={showCancelModal}
+            title="Close 'Add Actor Form'?"
+            description="Would you like to close the form and begin the encounter?"
+            confirmText="Yes, close form"
+            cancelText="No, I'm still adding actors"
+            onConfirm={() => {
+              setIsAddActorDisplayed(false);
+              setShowCancelModal(false);
+              beginEncounter();
+            }}
+            onCancel={() => setShowCancelModal(false)}
+            onClose={() => setShowCancelModal(false)}
+          />
           <h1 className={`${kaushan.className} text-4xl text-slate-200 mb-4`}>
             {isEncounterActive ? 'Initiative Order' : 'Encounter Setup'}
           </h1>

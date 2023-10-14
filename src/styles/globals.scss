@@ -45,3 +45,7 @@ body {
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+input, textarea {
+  @apply p-2
+}

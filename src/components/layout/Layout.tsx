@@ -12,6 +12,11 @@ import Sidebar from './Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';
+import { configureAbly } from '@ably-labs/react-hooks';
+
+configureAbly({
+  authUrl: `${process.env.NEXT_PUBLIC_HOSTNAME}/api/createTokenRequest`,
+});
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });

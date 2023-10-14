@@ -1,6 +1,6 @@
 import React from "react";
 import { usePresence, assertConfiguration } from "@ably-labs/react-hooks";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Participants.module.scss";
 
 export default function Participants(props) {
   const ably = assertConfiguration();

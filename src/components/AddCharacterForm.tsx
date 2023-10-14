@@ -3,7 +3,6 @@ import {
   Aladin,
   Almendra,
   Amarante,
-  Bungee_Spice,
   Cinzel_Decorative,
   Kaushan_Script,
   Quintessential,
@@ -22,7 +21,6 @@ import Heading1 from '@/components/forms/element/Heading1';
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
 const amarante = Amarante({ weight: '400', subsets: ['latin'] });
-const bungee = Bungee_Spice({ weight: '400', subsets: ['latin'] });
 const cinzel = Cinzel_Decorative({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 const quint = Quintessential({ weight: '400', subsets: ['latin'] });
