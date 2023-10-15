@@ -391,7 +391,7 @@ export default function Tracker({
           </>
         )}
         {!isAddActorDisplayed && getActor() !== undefined && (
-          <ActorDetails actor={getActor()} />
+          <ActorDetails actor={getActor() as Actor} />
         )}
         <div className="justify-self-end">{children}</div>
       </section>

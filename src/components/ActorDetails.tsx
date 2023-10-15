@@ -95,11 +95,12 @@ export default function ActorDetails({
             <div className="flex items-center mb-2">
               <GiFocusedLightning className="w-6 h-6 mr-8" />
               <div>
-                {actor.stats.initiative && actor.stats.initiative} (&nbsp;
-                {actor.stats.initiative &&
-                  actor.stats.initiative - actor.stats.initBonus}
+                {actor.stats?.initiative && actor.stats.initiative} (&nbsp;
+                {actor.stats?.initiative &&
+                  actor.stats?.initBonus &&
+                  actor.stats.initiative - actor.stats?.initBonus}
                 &nbsp;+&nbsp;
-                {actor.stats.initBonus} DEX&nbsp;)
+                {actor.stats?.initBonus} DEX&nbsp;)
               </div>
             </div>
             <div className="flex items-center">
@@ -120,14 +121,24 @@ export default function ActorDetails({
             <div className="flex items-center mb-2">
               <GiHealthNormal className="w-6 h-6 mr-8" />
               <div>
-                {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (&nbsp;
-                {((actor.stats.currHp / actor.stats.maxHp) * 100).toFixed(1)}
-                %&nbsp;)
+                {actor.stats &&
+                actor.stats.currHp !== undefined &&
+                actor.stats.maxHp !== undefined ? (
+                  <>
+                    {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (&nbsp;
+                    {((actor.stats.currHp / actor.stats.maxHp) * 100).toFixed(
+                      1,
+                    )}
+                    %&nbsp;)
+                  </>
+                ) : (
+                  'N/A'
+                )}
               </div>
             </div>
             <div className="flex items-center">
               <GiCheckedShield className="w-6 h-6 mr-8" />
-              <div>{actor.stats.ac}</div>
+              <div>{actor.stats && actor.stats.ac}</div>
             </div>
           </div>
         </div>
