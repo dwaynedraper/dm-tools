@@ -1,7 +1,14 @@
 import Ably from "ably";
 
+let key;
+if (process.env.NODE_ENV === 'development') {
+  key = process.env.NEXT_PUBLIC_ABLY_SERVER_API_KEY;
+} else {
+  key = process.env.ABLY_SERVER_API_KEY;
+}
+
 const rest = new Ably.Rest.Promise({
-  key: process.env.ABLY_SERVER_API_KEY,
+  key,
 });
 
 const channel = rest.channels.get("headlines");

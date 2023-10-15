@@ -2,7 +2,14 @@ import Ably from "ably/promises";
 import urlExists from "url-exists-nodejs";
 import ogs from "open-graph-scraper";
 
-const ably = new Ably.Rest(process.env.ABLY_SERVER_API_KEY);
+let key;
+if (process.env.NODE_ENV === 'development') {
+  key = process.env.NEXT_PUBLIC_ABLY_SERVER_API_KEY;
+} else {
+  key = process.env.ABLY_SERVER_API_KEY;
+}
+
+const ably = new Ably.Rest(key);
 const channel = ably.channels.get("headlines");
 
 export default async function handler(req, res) {

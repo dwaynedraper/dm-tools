@@ -1,5 +1,5 @@
 // React/Next imports
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Cinzel_Decorative,
   Kaushan_Script,
@@ -7,27 +7,36 @@ import {
 } from 'next/font/google';
 
 // Component imports
-// import ChatBar from './ChatBar';
+import ChatBar from './ChatBar';
 import Sidebar from './Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';
 import { configureAbly } from '@ably-labs/react-hooks';
 import Ably from 'ably/promises';
-import dynamic from 'next/dynamic';
 
-const ChatBar = dynamic(() => import('@/components/layout/ChatBar'), {
-  ssr: false,
-});
+let key: string | undefined;
+if (process.env.NODE_ENV === 'development') {
+  key = process.env.NEXT_PUBLIC_ABLY_SERVER_API_KEY;
+} else {
+  key = process.env.ABLY_SERVER_API_KEY;
+}
+
+let url: string | undefined;
+if (process.env.NODE_ENV === 'development') {
+  url = process.env.NEXT_PUBLIC_HOSTNAME;
+} else {
+  url = process.env.VERCEL_URL;
+}
 
 const ably = new Ably.Realtime.Promise({
-  key: process.env.ABLY_SERVER_API_KEY,
+  key,
 });
 
 const channel = ably.channels.get('chat');
 
 configureAbly({
-  authUrl: `${process.env.VERCEL_URL}/api/createTokenRequest`,
+  authUrl: `${url}/api/createTokenRequest`,
 });
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
