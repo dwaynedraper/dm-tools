@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import Button from '@/components/base/Button';
 import { BiMessage } from 'react-icons/bi';
+import { useAblyChat } from '@/hooks/useAblyChat';
 
 interface ChatBubbleProps {
   text: string;
@@ -20,13 +21,9 @@ function ChatBubble({ text }: ChatBubbleProps) {
   );
 }
 
-interface ChatBarProps {
-  chatLog: string[];
-  sendMessage: (text: string) => void;
-}
-
-export default function ChatBar({ chatLog, sendMessage }) {
-  const [messageText, setMessageText] = useState(''); // New state to hold the text
+export default function ChatBar() {
+  const { chatLog, sendMessage } = useAblyChat('chat');
+  const [messageText, setMessageText] = useState(''); // textarea value
 
   const handleSend = () => {
     sendMessage(messageText); // Send the text when the button is clicked

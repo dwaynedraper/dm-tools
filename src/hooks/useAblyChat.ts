@@ -11,9 +11,9 @@ if (process.env.NODE_ENV === 'development') {
 const ably = new Ably.Realtime.Promise({
   key,
 });
-const channel = ably.channels.get('chat');
 
-export function useAblyChat() {
+export function useAblyChat(channelName: string) {
+  const channel = ably.channels.get(channelName);
   const [chatLog, setChatLog] = useState<string[]>([
     'Real-time Serverless Websocket Chat Placeholder',
     // ... your placeholder messages

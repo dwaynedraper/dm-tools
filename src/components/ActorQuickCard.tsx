@@ -1,6 +1,7 @@
 // React/Next imports
 import React, { useEffect, useState } from 'react';
 import { useAblyChat } from '@/hooks/useAblyChat';
+import { useChat } from '@/hooks/useChat';
 
 // Component imports
 import Button from '@/components/base/Button';
@@ -41,7 +42,7 @@ export default function ActorQuickCard({
 }: ActorQuickCardProps) {
   const [hpValue, setHpValue] = React.useState('');
   const [initValue, setInitValue] = React.useState(0);
-  const { sendMessage } = useAblyChat();
+  const { sendMessage } = useAblyChat('chat');
 
   const submitInit = () => {
     handleInitChange(

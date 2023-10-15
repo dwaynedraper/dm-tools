@@ -15,30 +15,6 @@ import { gsap } from 'gsap';
 import { configureAbly } from '@ably-labs/react-hooks';
 import Ably from 'ably/promises';
 
-let key: string | undefined;
-if (process.env.NODE_ENV === 'development') {
-  key = process.env.NEXT_PUBLIC_ABLY_SERVER_API_KEY;
-} else {
-  key = process.env.ABLY_SERVER_API_KEY;
-}
-
-let url: string | undefined;
-if (process.env.NODE_ENV === 'development') {
-  url = process.env.NEXT_PUBLIC_HOSTNAME;
-} else {
-  url = process.env.VERCEL_URL;
-}
-
-const ably = new Ably.Realtime.Promise({
-  key,
-});
-
-const channel = ably.channels.get('chat');
-
-configureAbly({
-  authUrl: `${url}/api/createTokenRequest`,
-});
-
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 const quint = Quintessential({
@@ -54,33 +30,33 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps): React.ReactElement {
-  const [chatLog, setChatLog] = useState<string[]>([
-    'Real-time Serverless Websocket Chat Placeholder',
-    // ... your placeholder messages
-    // TODO: Add tutorial-style messages as placeholders or
-    // TODO: possibly a customized greeting when a user joins the chat
-  ]);
+  // const [chatLog, setChatLog] = useState<string[]>([
+  //   'Real-time Serverless Websocket Chat Placeholder',
+  //   // ... your placeholder messages
+  //   // TODO: Add tutorial-style messages as placeholders or
+  //   // TODO: possibly a customized greeting when a user joins the chat
+  // ]);
 
-  useEffect(() => {
-    // Subscribe to the channel for messages
-    const subscribe = async () => {
-      await channel.subscribe((message) => {
-        setChatLog((prevChatLog) => [...prevChatLog, message.data]); // Append the new message to the chatLog
-      });
-    };
+  // useEffect(() => {
+  //   // Subscribe to the channel for messages
+  //   const subscribe = async () => {
+  //     await channel.subscribe((message) => {
+  //       setChatLog((prevChatLog) => [...prevChatLog, message.data]); // Append the new message to the chatLog
+  //     });
+  //   };
 
-    subscribe();
+  //   subscribe();
 
-    // Cleanup
-    return () => {
-      channel.unsubscribe();
-    };
-  }, []);
+  //   // Cleanup
+  //   return () => {
+  //     channel.unsubscribe();
+  //   };
+  // }, []);
 
-  const sendMessage = async (text: string) => {
-    console.log('clicked');
-    await channel.publish({ name: 'message', data: text });
-  };
+  // const sendMessage = async (text: string) => {
+  //   console.log('clicked');
+  //   await channel.publish({ name: 'message', data: text });
+  // };
 
   const boxRef = useRef(null);
 
@@ -88,7 +64,7 @@ export default function Layout({ children }: LayoutProps): React.ReactElement {
     <div className="flex w-full h-screen" ref={boxRef}>
       <Sidebar />
       <main className={`h-screen w-full`}>{children}</main>
-      <ChatBar chatLog={chatLog} sendMessage={sendMessage} />
+      <ChatBar />
     </div>
   );
 }
