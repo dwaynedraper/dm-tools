@@ -22,7 +22,7 @@ const ably = new Ably.Realtime.Promise({
 const channel = ably.channels.get('chat');
 
 configureAbly({
-  authUrl: `${process.env.NEXT_PUBLIC_HOSTNAME}/api/createTokenRequest`,
+  authUrl: `${process.env.VERCEL_URL}/api/createTokenRequest`,
 });
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
