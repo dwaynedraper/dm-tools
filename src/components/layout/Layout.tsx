@@ -1,5 +1,5 @@
 // React/Next imports
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Cinzel_Decorative,
   Kaushan_Script,
@@ -7,13 +7,18 @@ import {
 } from 'next/font/google';
 
 // Component imports
-import ChatBar from './ChatBar';
+// import ChatBar from './ChatBar';
 import Sidebar from './Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';
 import { configureAbly } from '@ably-labs/react-hooks';
 import Ably from 'ably/promises';
+import dynamic from 'next/dynamic';
+
+const ChatBar = dynamic(() => import('@/components/layout/ChatBar'), {
+  ssr: false,
+});
 
 const ably = new Ably.Realtime.Promise({
   key: process.env.ABLY_SERVER_API_KEY,

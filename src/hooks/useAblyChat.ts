@@ -4,7 +4,6 @@ import Ably from 'ably/promises';
 
 const ably = new Ably.Realtime.Promise({
   key: process.env.ABLY_SERVER_API_KEY,
-  log: { level: 4 },
 });
 
 const channel = ably.channels.get('chat');
