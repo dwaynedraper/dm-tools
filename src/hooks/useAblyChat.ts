@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Ably from 'ably/promises';
 
 const ably = new Ably.Realtime.Promise({
-  key: process.env.NEXT_PUBLIC_ABLY_SERVER_API_KEY,
+  key: process.env.ABLY_SERVER_API_KEY,
   log: { level: 4 },
 });
 
