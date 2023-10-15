@@ -18,12 +18,12 @@ if (process.env.NODE_ENV === 'development') {
 
 const ably = new Ably.Realtime.Promise({
   key,
-  authUrl: `${url}/api/createTokenRequest`,
+  authUrl: `/api/createTokenRequest`,
 });
 
 configureAbly({
   key,
-  authUrl: `${url}/api/createTokenRequest`,
+  authUrl: `/api/createTokenRequest`,
 });
 
 export function useAblyChat(channelName: string) {
