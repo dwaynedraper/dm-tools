@@ -12,8 +12,8 @@ import Sidebar from './Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';
-import { configureAbly } from '@ably-labs/react-hooks';
-import Ably from 'ably/promises';
+// import { configureAbly } from '@ably-labs/react-hooks';
+// import Ably from 'ably/promises';
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });

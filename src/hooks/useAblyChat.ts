@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Ably from 'ably/promises';
+import { configureAbly } from '@ably-labs/react-hooks';
 
 let key: string | undefined;
 if (process.env.NODE_ENV === 'development') {
@@ -8,8 +9,21 @@ if (process.env.NODE_ENV === 'development') {
   key = process.env.ABLY_SERVER_API_KEY;
 }
 
+let url: string | undefined;
+if (process.env.NODE_ENV === 'development') {
+  url = process.env.NEXT_PUBLIC_HOSTNAME;
+} else {
+  url = process.env.VERCEL_URL;
+}
+
 const ably = new Ably.Realtime.Promise({
   key,
+  authUrl: `${url}/api/createTokenRequest`,
+});
+
+configureAbly({
+  key,
+  authUrl: `${url}/api/createTokenRequest`,
 });
 
 export function useAblyChat(channelName: string) {
