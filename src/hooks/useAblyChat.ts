@@ -9,21 +9,22 @@ if (process.env.NODE_ENV === 'development') {
   key = process.env.ABLY_SERVER_API_KEY;
 }
 
-let url: string | undefined;
-if (process.env.NODE_ENV === 'development') {
-  url = process.env.NEXT_PUBLIC_HOSTNAME;
-} else {
-  url = process.env.VERCEL_URL;
-}
+// Assuming the URL should be https://your-domain.com/api/createTokenRequest
+const authUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000/api/createTokenRequest'
+    : `${process.env.VERCEL_URL}/api/createTokenRequest`;
+
+console.log('authUrl', authUrl);
 
 const ably = new Ably.Realtime.Promise({
   key,
-  authUrl: `/api/createTokenRequest`,
+  authUrl,
 });
 
 configureAbly({
   key,
-  authUrl: `/api/createTokenRequest`,
+  authUrl,
 });
 
 export function useAblyChat(channelName: string) {
