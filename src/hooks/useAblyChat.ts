@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'development') {
 const authUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/api/createTokenRequest'
-    : `/api/createTokenRequest`;
+    : `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/createTokenRequest`;
 
 console.log('authUrl', authUrl);
 

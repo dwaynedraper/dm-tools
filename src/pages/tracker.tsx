@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@/components/layout/Layout';
 import Tracker from '@/components/Tracker';
 import Head from 'next/head';
-import Participants from '@/components/Participants';
+import DiceRoller from '@/components/DiceRoller';
 
 export default function TrackerPage() {
   return (
@@ -11,7 +11,7 @@ export default function TrackerPage() {
         <title>D&D Initiative Tracker</title>
       </Head>
       <Tracker>
-        <Participants />
+        <DiceRoller />
       </Tracker>
     </Layout>
   );

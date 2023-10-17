@@ -15,7 +15,7 @@ let url;
 if (process.env.NODE_ENV === 'development') {
   url = process.env.NEXT_PUBLIC_HOSTNAME;
 } else {
-  url = process.env.VERCEL_URL;
+  url = process.env.NEXT_PUBLIC_VERCEL_URL;
 }
 
 export const AblyProvider = ({ children }) => {

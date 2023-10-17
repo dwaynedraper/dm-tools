@@ -7,13 +7,11 @@ import {
 } from 'next/font/google';
 
 // Component imports
-import ChatBar from './ChatBar';
-import Sidebar from './Sidebar';
+import ChatBar from '@/components/layout/ChatBar';
+import Sidebar from '@/components/layout/Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';
-// import { configureAbly } from '@ably-labs/react-hooks';
-// import Ably from 'ably/promises';
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], weight: ['400'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -30,34 +28,6 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps): React.ReactElement {
-  // const [chatLog, setChatLog] = useState<string[]>([
-  //   'Real-time Serverless Websocket Chat Placeholder',
-  //   // ... your placeholder messages
-  //   // TODO: Add tutorial-style messages as placeholders or
-  //   // TODO: possibly a customized greeting when a user joins the chat
-  // ]);
-
-  // useEffect(() => {
-  //   // Subscribe to the channel for messages
-  //   const subscribe = async () => {
-  //     await channel.subscribe((message) => {
-  //       setChatLog((prevChatLog) => [...prevChatLog, message.data]); // Append the new message to the chatLog
-  //     });
-  //   };
-
-  //   subscribe();
-
-  //   // Cleanup
-  //   return () => {
-  //     channel.unsubscribe();
-  //   };
-  // }, []);
-
-  // const sendMessage = async (text: string) => {
-  //   console.log('clicked');
-  //   await channel.publish({ name: 'message', data: text });
-  // };
-
   const boxRef = useRef(null);
 
   return (
