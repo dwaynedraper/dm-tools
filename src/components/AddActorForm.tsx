@@ -17,19 +17,18 @@ import {
   Almendra,
   Amarante,
   Architects_Daughter,
-  Bungee_Spice,
   Cinzel_Decorative,
   Inter,
   Kaushan_Script,
   Quintessential,
   Racing_Sans_One,
 } from 'next/font/google';
+import generateAdjective from '@/utils/adjectiveGenerator';
 
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
 const amarante = Amarante({ weight: '400', subsets: ['latin'] });
 const architect = Architects_Daughter({ weight: '400', subsets: ['latin'] });
-const bungee = Bungee_Spice({ weight: '400', subsets: ['latin'] });
 const cinzel = Cinzel_Decorative({ weight: '400', subsets: ['latin'] });
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -87,7 +86,8 @@ export default function AddActorForm({
 
     // Iterate over the number of actors specified
     for (let i = 1; i <= numActors; i++) {
-      const actorName = `${baseName} ${i}`; // Append the iterator to the actor name
+      const adj = generateAdjective(); // Generate a random adjective
+      const actorName = `${adj} ${baseName}`; // Append the iterator to the actor name
       const actorData = {
         name: actorName,
         friendly: formData.get('friendly') === 'true',

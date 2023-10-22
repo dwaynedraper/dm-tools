@@ -1,17 +1,18 @@
 // React/Next imports
-import React from 'react';
+import React, { useState } from 'react';
 
 // Component imports
 import Button from '@/components/base/Button';
 
 // Other imports
+import { useAblyChannel } from '@/hooks/useAblyChannel';
 import { Actor } from '@/types/actor';
 import classNames from 'classnames';
 import { FaRegTrashCan } from 'react-icons/fa6';
+import { GiCheckedShield, GiSkullCrossedBones } from 'react-icons/gi';
+import * as Yup from 'yup';
 
 import { Inter, Kaushan_Script } from 'next/font/google';
-import { GiCheckedShield, GiSkullCrossedBones } from 'react-icons/gi';
-
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
@@ -20,7 +21,6 @@ interface ActorQuickCardProps {
   index: number;
   isEncounterActive: boolean;
   isActive: boolean;
-  isHovered: boolean;
   isSelected: boolean;
   handleHpChange: (newHp: number) => void;
   handleDelete: (id: string) => void;
@@ -29,35 +29,93 @@ interface ActorQuickCardProps {
 
 export default function ActorQuickCard({
   actor,
-  index,
   isEncounterActive,
   isActive,
-  isHovered,
   isSelected,
   handleHpChange,
   handleInitChange,
   handleDelete,
 }: ActorQuickCardProps) {
-  const [hpValue, setHpValue] = React.useState('');
-  const [initValue, setInitValue] = React.useState(0);
+  const [hpValue, setHpValue] = useState('');
+  const [initValue, setInitValue] = useState(0);
+  const [initError, setInitError] = useState('');
+  const [hpError, setHpError] = useState('');
 
-  const submitInit = () => {
-    handleInitChange(
-      initValue + (actor.stats?.initBonus ? actor.stats.initBonus : 0),
-      actor.name,
-    );
-    setInitValue(0); // Clear the input
+  const { sendMessage } = useAblyChannel('chat');
+
+  const initSchema = Yup.object().shape({
+    initValue: Yup.number()
+      .required()
+      .min(0, 'Must be a number between 1 and 20')
+      .max(20, 'Must be a number between 1 and 20'),
+  });
+
+  const hpSchema = Yup.object().shape({
+    hpValue: Yup.string()
+      .required('HP is required')
+      .matches(
+        /^\+?\-?\d+$/,
+        'HP must be a number or a signed number (e.g. 45, +10 or -5)',
+      ),
+  });
+
+  const validateInput = async (
+    schema: Yup.Schema,
+    value: any,
+    setError: (error: string) => void,
+    onSuccess: () => void, // New parameter: callback to run on success
+  ) => {
+    try {
+      await schema.validate(value);
+      setError('');
+      onSuccess(); // Call onSuccess callback if validation succeeds
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        setError(error.message);
+      } else {
+        console.error('An unknown error occurred: ', error);
+      }
+    }
   };
 
-  const rollInit = () => {
-    let newInit = Math.floor(Math.random() * 20) + 1;
-    // Ensure initBonus is a number before adding to newInit
-    const initBonus = actor.stats?.initBonus
-      ? parseInt(actor.stats.initBonus.toString())
-      : 0;
-    newInit += initBonus;
-    handleInitChange(newInit, actor.name);
-    setInitValue(0); // Clear the input
+  const submitInit = () => {
+    validateInput(initSchema, { initValue }, setInitError, () => {
+      // Define what to do on success
+      handleInitChange(
+        initValue + (actor.stats?.initBonus ? actor.stats.initBonus : 0),
+        actor.name,
+      );
+      setInitValue(0); // Clear the input
+    });
+  };
+
+  const rollInit = async () => {
+    await validateInput(initSchema, { initValue }, setInitError, () => {
+      // Define what to do on success
+      let newInit = Math.floor(Math.random() * 20) + 1;
+      if (!initError) {
+        let newInit = Math.floor(Math.random() * 20) + 1;
+        // Ensure initBonus is a number before adding to newInit
+        const initBonus = actor.stats?.initBonus
+          ? parseInt(actor.stats.initBonus.toString())
+          : 0;
+        newInit += initBonus;
+        handleInitChange(newInit, actor.name);
+        setInitValue(0); // Clear the input
+        const messageText = `${
+          actor.name
+        } rolled a ${newInit} for initiative! ${
+          newInit - actor.stats!.initBonus!
+        } + ${actor.stats!.initBonus} ${
+          newInit > 20
+            ? 'Critical Success!'
+            : newInit === 1
+            ? 'Critical Failure!'
+            : ''
+        }`;
+        sendMessage(messageText);
+      }
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -107,8 +165,23 @@ export default function ActorQuickCard({
   };
 
   const updateInit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInitValue(parseInt(e.target.value)); // Update initValue on user input
+    const value = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    const intValue = parseInt(value);
+
+    if (isNaN(intValue)) {
+      setInitError('Please enter a number.');
+      setInitValue(0); // Reset initValue to 0 if input is not a number
+    } else if (intValue > 20) {
+      setInitError('Value cannot exceed 20.');
+    } else {
+      setInitError(''); // Clear any previous error
+      setInitValue(intValue); // Update initValue only if it's a valid number and <= 20
+    }
   };
+
+  // const updateInit = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInitValue(parseInt(e.target.value)); // Update initValue on user input
+  // };
 
   const confirmDelete = (id: string) => {
     const userConfirmed = window.confirm(
@@ -128,7 +201,7 @@ export default function ActorQuickCard({
       <div
         key={actor.name}
         className={classNames(
-          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-2xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
+          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
           {
             'py-4 border bg-slate-900 text-cyan-500 text-3xl': isActive,
             'py-1 bg-slate-700 border border-cyan-500': isSelected,
@@ -181,6 +254,7 @@ export default function ActorQuickCard({
                   </Button>
                 )}
               </div>
+              <div className="error-message">{initError}</div>
             </>
           )}
           {isEncounterActive && (

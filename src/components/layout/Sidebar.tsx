@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { GiDiceTwentyFacesTwenty } from 'react-icons/gi';
 import { RxDashboard } from 'react-icons/rx';
-import { BsLayoutTextSidebarReverse } from 'react-icons/bs';
+import { BsPin, BsPinFill, BsLayoutTextSidebarReverse } from 'react-icons/bs';
+import { GoSidebarExpand } from 'react-icons/go';
 import { IoEarthOutline } from 'react-icons/io5';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { Kaushan_Script } from 'next/font/google';
@@ -33,32 +34,31 @@ interface SidebarProps {}
 
 export default function Sidebar({}: SidebarProps): React.ReactElement {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarToggleable, setIsSidebarToggleable] = useState(true);
   const sidebarRef = React.useRef(null);
 
   useEffect(() => {
     gsap.set(sidebarRef.current, { autoAlpha: 1 }); // Ensure the sidebar is visible
   }, []);
 
+  useEffect(() => {
+    if (sidebarOpen) {
+      gsap.to(sidebarRef.current, {
+        width: '250px',
+        duration: 0.3,
+        ease: 'power3.out',
+      });
+    } else {
+      gsap.to(sidebarRef.current, {
+        width: '75px',
+        duration: 0.3,
+        ease: 'power3.out',
+      });
+    }
+  }, [sidebarOpen]);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  const handleMouseEnter = () => {
-    gsap.to(sidebarRef.current, {
-      width: '250px',
-      duration: 0.3,
-      ease: 'power3.out',
-    });
-    setSidebarOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    gsap.to(sidebarRef.current, {
-      width: '75px',
-      duration: 0.3,
-      ease: 'power3.out',
-    });
-    setSidebarOpen(false);
   };
 
   return (
@@ -66,8 +66,15 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
       <div
         ref={sidebarRef}
         className={`h-screen bg-red-100`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onClick={() => {
+          if (isSidebarToggleable) toggleSidebar();
+        }}
+        onMouseEnter={() => {
+          if (!isSidebarToggleable) setSidebarOpen(true);
+        }}
+        onMouseLeave={() => {
+          if (!isSidebarToggleable) setSidebarOpen(false);
+        }}
       >
         <div
           className={classNames(
@@ -142,16 +149,42 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
               </li>
 
               <li className="mt-auto">
-                <a
-                  href="#"
-                  className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
-                >
-                  <Cog6ToothIcon
-                    className="w-8 h-8 shrink-0"
-                    aria-hidden="true"
-                  />
-                  {sidebarOpen && 'Settings'}
-                </a>
+                <ul>
+                  <li>
+                    <div
+                      onClick={() => {
+                        setSidebarOpen(true);
+                        setIsSidebarToggleable(!isSidebarToggleable);
+                      }}
+                      className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
+                    >
+                      {isSidebarToggleable ? (
+                        <>
+                          <BsPin className="w-8 h-8 shrink-0" />
+                          {sidebarOpen && 'Manual Mode On'}
+                        </>
+                      ) : (
+                        <>
+                          <GoSidebarExpand className="w-8 h-8 shrink-0" />
+                          {sidebarOpen && 'Auto-Collapse On'}
+                        </>
+                      )}
+                    </div>
+                  </li>
+
+                  <li className="mt-auto">
+                    <a
+                      href="#"
+                      className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
+                    >
+                      <Cog6ToothIcon
+                        className="w-8 h-8 shrink-0"
+                        aria-hidden="true"
+                      />
+                      {sidebarOpen && 'Settings'}
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </nav>

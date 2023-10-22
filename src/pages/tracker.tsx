@@ -1,14 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from '@/components/layout/Layout';
 import Tracker from '@/components/Tracker';
-import AddActorForm from '@/components/AddActorForm';
 import Head from 'next/head';
-
-import { configureAbly } from '@ably-labs/react-hooks';
-
-configureAbly({
-  authUrl: `${process.env.NEXT_PUBLIC_HOSTNAME}/api/createTokenRequest`,
-});
+import DiceRoller from '@/components/DiceRoller';
 
 export default function TrackerPage() {
   return (
@@ -17,7 +11,7 @@ export default function TrackerPage() {
         <title>D&D Initiative Tracker</title>
       </Head>
       <Tracker>
-        <></>
+        <DiceRoller />
       </Tracker>
     </Layout>
   );

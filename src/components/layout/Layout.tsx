@@ -1,5 +1,5 @@
 // React/Next imports
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Cinzel_Decorative,
   Kaushan_Script,
@@ -7,8 +7,8 @@ import {
 } from 'next/font/google';
 
 // Component imports
-import ChatBar from './ChatBar';
-import Sidebar from './Sidebar';
+import ChatBar from '@/components/layout/ChatBar';
+import Sidebar from '@/components/layout/Sidebar';
 
 // Other imports
 import { gsap } from 'gsap';

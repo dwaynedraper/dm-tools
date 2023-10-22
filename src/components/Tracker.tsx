@@ -2,46 +2,44 @@
 import React, { useEffect, useState } from 'react';
 
 // Component imports
-import AddActorForm from '@/components/AddActorForm';
+import ActorDetails from '@/components/ActorDetails';
 import ActorQuickCard from '@/components/ActorQuickCard';
+import AddActorForm from '@/components/AddActorForm';
+import Button from '@/components/base/Button';
+import MyDialog from '@/components/headless-ui/MyDialog';
+import Participants from '@/components/Participants';
 
 // Other imports
 import styles from '@/styles/Tracker.module.scss';
 import { Actor } from '@/types/actor';
-import classNames from 'classnames';
-import { Bungee_Spice, Inter, Kaushan_Script } from 'next/font/google';
-import Button from '@/components/base/Button';
-import ActorDetails from './ActorDetails';
+import { Inter, Kaushan_Script } from 'next/font/google';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 import { GiDiceTwentyFacesTwenty, GiCrossedSwords } from 'react-icons/gi';
-import { AiOutlineUserAdd, AiOutlineCloseSquare } from 'react-icons/ai';
-import { FaStop } from 'react-icons/fa';
+import { AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
-const spice = Bungee_Spice({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
 interface TrackerProps {
-  data: any;
+  className?: string;
   children: React.ReactNode;
 }
 
-export default function Tracker({ children }) {
+export default function Tracker({
+  children,
+  className,
+}: TrackerProps): React.ReactElement {
   const [currentActors, setCurrentActors] = useState<Actor[]>([]);
-  const [data, setData] = React.useState<any[]>([]);
   const [isAddActorDisplayed, setIsAddActorDisplayed] = useState(false);
   const [isEncounterActive, setIsEncounterActive] = useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [sorted, setSorted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   /**
    * State for the button's active, hovered, and selected states
-   * isActive: It is this actor's turn
-   * isHovered: The user is hovering over this actor (handle CSS with hover:property)
+   * activeActor: The index of the current actor in the initiative order
    * isSelected: The user has selected this actor by clicking
-   * The hovered and selected items change the displayed component in <section> for main content
-   * isHovered will temporarily change the component
-   * isSelected is what component shows when none are hovered
    */
   const [activeActor, setActiveActor] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState('');
@@ -66,10 +64,10 @@ export default function Tracker({ children }) {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
+  // Actor related methods
   const cycleActors = () => {
     if (activeActor === currentActors.length - 1 || activeActor === null) {
       setActiveActor(0);
@@ -77,7 +75,6 @@ export default function Tracker({ children }) {
       setActiveActor(activeActor + 1);
     }
   };
-
   const reverseActors = () => {
     if (activeActor === null) return;
     if (activeActor === 0) {
@@ -86,11 +83,9 @@ export default function Tracker({ children }) {
       setActiveActor(activeActor - 1);
     }
   };
-
   const openAddActorForm = () => {
     setIsAddActorDisplayed(true);
   };
-
   const handleAddActors = async (formDataObjArray: any[]) => {
     // Generate an array of new actors with unique IDs and the provided data
     const newActors = formDataObjArray.map((formDataObj) => ({
@@ -104,20 +99,27 @@ export default function Tracker({ children }) {
     // Hide the Add Actor form
     setIsAddActorDisplayed(false);
   };
-
-  const setHovered = (actorName: string) => {
-    setIsHovered(actorName);
+  const handleDelete = (id: string) => {
+    const newActors = currentActors.filter((actor) => actor._id !== id);
+    setCurrentActors(newActors);
   };
 
+  // ActorQuickCard methods
   const setSelected = (actorName: string) => {
     setIsSelected(actorName);
   };
-
+  const setHovered = (actorName: string) => {
+    setIsHovered(actorName);
+  };
   const unsetHovered = () => {
     setIsHovered('');
   };
 
   const beginEncounter = () => {
+    if (isAddActorDisplayed) {
+      setShowCancelModal(true);
+      return;
+    }
     // Roll initiative for actors if not set
     const updatedActors = currentActors.map((actor) => {
       if (actor.stats?.initiative === undefined) {
@@ -143,7 +145,7 @@ export default function Tracker({ children }) {
       return 0; // Default case, order remains unchanged
     });
 
-    // Update the state with the new actors list and set encounter to active
+    // Update the state with the sorted actors list and set encounter to active
     setCurrentActors(updatedActors);
     setActiveActor(0);
     setIsEncounterActive(true);
@@ -178,11 +180,13 @@ export default function Tracker({ children }) {
       }
       return actor;
     });
+    setCurrentActors(updatedActors);
+    setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    const newActors = currentActors.filter((actor) => actor._id !== id);
-    setCurrentActors(newActors);
+  const clearEnemies = () => {
+    const friendlyActors = currentActors.filter((actor) => actor.friendly);
+    setCurrentActors(friendlyActors);
   };
 
   const updateInit = (newInit: number, actorName: string) => {
@@ -226,11 +230,40 @@ export default function Tracker({ children }) {
   };
 
   return (
-    <div className="flex h-full">
+    <div className={`relative flex h-full ${className}`}>
       <div
         className={`${styles.actors} h-full w-fit bg-cyan-300 text-slate-900 `}
       >
-        <div className="flex flex-col h-full px-4 pt-8 overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded bg-slate-800 w-96">
+        <div className="flex flex-col h-full px-4 pt-8 overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded bg-slate-700 w-96">
+          <MyDialog
+            className="absolute inset-0 z-10 flex items-center justify-center"
+            isOpen={showModal}
+            title="Clear Encounter?"
+            description="Would you like to clear all enemies from the encounter?"
+            confirmText="Clear Enemies"
+            cancelText="No"
+            onConfirm={() => {
+              clearEnemies();
+              setShowModal(false);
+            }}
+            onCancel={() => setShowModal(false)}
+            onClose={() => setShowModal(false)}
+          />
+          <MyDialog
+            className="absolute inset-0 z-10 flex items-center justify-center"
+            isOpen={showCancelModal}
+            title="Close 'Add Actor Form'?"
+            description="Would you like to close the form and begin the encounter?"
+            confirmText="Yes, close form"
+            cancelText="No, I'm still adding actors"
+            onConfirm={() => {
+              setIsAddActorDisplayed(false);
+              setShowCancelModal(false);
+              beginEncounter();
+            }}
+            onCancel={() => setShowCancelModal(false)}
+            onClose={() => setShowCancelModal(false)}
+          />
           <h1 className={`${kaushan.className} text-4xl text-slate-200 mb-4`}>
             {isEncounterActive ? 'Initiative Order' : 'Encounter Setup'}
           </h1>
@@ -271,7 +304,6 @@ export default function Tracker({ children }) {
                   index={index}
                   isEncounterActive={isEncounterActive}
                   isActive={index === activeActor}
-                  isHovered={actor.name === isHovered}
                   isSelected={actor.name === isSelected}
                   handleHpChange={(newHp) => handleHpChange(newHp, actor.name)}
                   handleDelete={handleDelete}
@@ -295,14 +327,14 @@ export default function Tracker({ children }) {
           <>
             <div className="flex">
               <Button
-                className={`border-t border-r w-1/2 border-slate-100 flex items-center `}
+                className={`w-1/2 border-slate-100 flex items-center `}
                 onClick={reverseActors}
               >
                 <HiArrowLongLeft className="w-8 h-8 mr-4" />
                 Go Back
               </Button>
               <Button
-                className={`border-t w-1/2 border-slate-100 flex items-center justify-end bg-green-700`}
+                className={` w-1/2 border-slate-100 flex items-center justify-end bg-green-700`}
                 onClick={cycleActors}
               >
                 End Turn
@@ -310,11 +342,11 @@ export default function Tracker({ children }) {
               </Button>
             </div>
             <Button
-              className={`border-t border-slate-100 flex items-center justify-center`}
+              className={` border-slate-100 flex items-center justify-center`}
               intent={'secondary'}
               onClick={endCombat}
             >
-              <FaStop className="w-8 h-8 mr-4" />
+              <AiOutlineClose className="w-8 h-8 mr-4" />
               End Combat
             </Button>
           </>
@@ -338,7 +370,7 @@ export default function Tracker({ children }) {
           </>
         )}
       </div>
-      <section className="w-full h-full p-4 overflow-auto bg-slate-900">
+      <section className="flex flex-col justify-between w-full h-full p-4 overflow-auto bg-slate-900">
         {isAddActorDisplayed && (
           <>
             <AddActorForm
@@ -351,9 +383,12 @@ export default function Tracker({ children }) {
           </>
         )}
         {!isAddActorDisplayed && getActor() !== undefined && (
-          <ActorDetails actor={getActor()} />
+          <ActorDetails actor={getActor() as Actor} />
         )}
-        {children}
+        <div className="justify-self-end">
+          {children}
+          <Participants />
+        </div>
       </section>
     </div>
   );
