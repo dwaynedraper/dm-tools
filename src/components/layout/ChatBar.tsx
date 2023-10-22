@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import Button from '@/components/base/Button';
 import { BiMessage } from 'react-icons/bi';
-import { useAblyChat } from '@/hooks/useAblyChat';
+import { useAblyChannel } from '@/hooks/useAblyChannel';
 
 interface ChatBubbleProps {
   text: string;
@@ -22,7 +22,7 @@ function ChatBubble({ text }: ChatBubbleProps) {
 }
 
 export default function ChatBar() {
-  const { chatLog, sendMessage } = useAblyChat('chat');
+  const { messages, sendMessage } = useAblyChannel('chat');
   const [messageText, setMessageText] = useState(''); // textarea value
 
   const handleSend = () => {
@@ -45,8 +45,8 @@ export default function ChatBar() {
       <div
         className={`h-9/10 flex flex-col items-end overflow-y-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded py-2 pr-2`}
       >
-        {chatLog.map((el, index) => (
-          <ChatBubble key={index} text={el} />
+        {messages.map((el, index) => (
+          <ChatBubble key={index} text={el.data} />
         ))}
       </div>
       <div className="flex flex-col items-end h-1/10">

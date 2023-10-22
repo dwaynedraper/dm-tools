@@ -2,26 +2,20 @@
 import React, { useEffect, useState } from 'react';
 
 // Component imports
-import AddActorForm from '@/components/AddActorForm';
+import ActorDetails from '@/components/ActorDetails';
 import ActorQuickCard from '@/components/ActorQuickCard';
-import { Dialog } from '@headlessui/react';
+import AddActorForm from '@/components/AddActorForm';
+import Button from '@/components/base/Button';
+import MyDialog from '@/components/headless-ui/MyDialog';
+import Participants from '@/components/Participants';
 
 // Other imports
 import styles from '@/styles/Tracker.module.scss';
 import { Actor } from '@/types/actor';
-import classNames from 'classnames';
 import { Inter, Kaushan_Script } from 'next/font/google';
-import Button from '@/components/base/Button';
-import ActorDetails from './ActorDetails';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 import { GiDiceTwentyFacesTwenty, GiCrossedSwords } from 'react-icons/gi';
-import {
-  AiOutlineUserAdd,
-  AiOutlineCloseSquare,
-  AiOutlineClose,
-} from 'react-icons/ai';
-import { FaStop } from 'react-icons/fa';
-import MyDialog from '@/components/headless/MyDialog';
+import { AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -45,7 +39,6 @@ export default function Tracker({
   /**
    * State for the button's active, hovered, and selected states
    * activeActor: The index of the current actor in the initiative order
-   * isHovered: The user is hovering over this actor (handle CSS with hover:property)
    * isSelected: The user has selected this actor by clicking
    */
   const [activeActor, setActiveActor] = useState<number | null>(null);
@@ -311,7 +304,6 @@ export default function Tracker({
                   index={index}
                   isEncounterActive={isEncounterActive}
                   isActive={index === activeActor}
-                  isHovered={actor.name === isHovered}
                   isSelected={actor.name === isSelected}
                   handleHpChange={(newHp) => handleHpChange(newHp, actor.name)}
                   handleDelete={handleDelete}
@@ -393,7 +385,10 @@ export default function Tracker({
         {!isAddActorDisplayed && getActor() !== undefined && (
           <ActorDetails actor={getActor() as Actor} />
         )}
-        <div className="justify-self-end">{children}</div>
+        <div className="justify-self-end">
+          {children}
+          <Participants />
+        </div>
       </section>
     </div>
   );

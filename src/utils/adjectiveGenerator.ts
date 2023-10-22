@@ -72,4 +72,3 @@ export default function generateAdjective(): string {
 
 // Usage
 const randomAdjective = generateAdjective();
-console.log(randomAdjective); // Output: Any adjective from the list

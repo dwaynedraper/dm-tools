@@ -49,8 +49,6 @@ export default function MyDialog({
             {cancelText}
           </Button>
         </div>
-        {/* <button onClick={onConfirm}>{confirmText}</button>
-        <button onClick={onCancel}>{cancelText}</button> */}
       </Dialog.Panel>
     </Dialog>
   );

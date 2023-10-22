@@ -24,7 +24,7 @@ const party = [
   },
 ];
 
-const Party = () => {
+const YourParty = () => {
   return (
     <div className="flex flex-col items-center py-8 mx-auto max-w-7xl lg:px-8 bg-slate-900/10">
       <div className="max-w-2xl mx-auto lg:mx-0">
@@ -70,10 +70,10 @@ export default function Dashboard() {
       >
         Dashboard
       </div>
-      <Party />
-      <Party />
-      <Party />
-      <Party />
+      <YourParty />
+      <YourParty />
+      <YourParty />
+      <YourParty />
     </div>
   );
 }

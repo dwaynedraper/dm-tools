@@ -12,6 +12,7 @@ export const content = [
   './src/components/**/*.{js,ts,jsx,tsx,mdx}',
   './src/app/**/*.{js,ts,jsx,tsx,mdx}',
 ];
+
 export const theme = {
   extend: {
     backgroundImage: {
@@ -27,6 +28,7 @@ export const theme = {
     },
   },
 };
+
 export const plugins = [function ({ addUtilities }) {
   const newUtilities = {
     '.scrollbar-hide': {

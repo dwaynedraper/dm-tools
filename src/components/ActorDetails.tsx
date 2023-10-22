@@ -46,7 +46,6 @@ export default function ActorDetails({
     }
   };
 
-  console.log('actor', actor);
   return (
     <>
       <div className="max-w-4xl p-8 rounded shadow bg-slate-700 shadow-cyan-500 hover:shadow-lg hover:shadow-cyan-500">
@@ -93,9 +92,15 @@ export default function ActorDetails({
         <div className="flex p-4">
           <div className="flex flex-col w-1/2">
             <div className="flex items-center mb-2">
-              <GiFocusedLightning className="w-6 h-6 mr-8" />
+              <div className="flex items-center w-12 h-6 mr-8">
+                <GiFocusedLightning className="w-6 h-6 text-blue-600" />
+                &nbsp;Init
+              </div>
               <div>
-                {actor.stats?.initiative && actor.stats.initiative} (&nbsp;
+                <span className="text-2xl">
+                  {actor.stats?.initiative && actor.stats.initiative}&nbsp;
+                </span>
+                (&nbsp;
                 {actor.stats?.initiative &&
                   actor.stats?.initBonus &&
                   actor.stats.initiative - actor.stats?.initBonus}
@@ -106,12 +111,14 @@ export default function ActorDetails({
             <div className="flex items-center">
               {actor.friendly ? (
                 <>
-                  <GiHearts className="w-6 h-6 mr-8 text-green-600" />
-                  <div>Friendly</div>
+                  <div className="flex items-center w-12 h-6 mr-8">
+                    <GiHearts className="justify-start w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="text-2xl">Friendly</div>
                 </>
               ) : (
                 <>
-                  <GiSkullCrossedBones className="w-6 h-6 mr-8 text-red-600" />
+                  <GiSkullCrossedBones className="w-12 h-6 mr-8 text-red-600" />
                   <div>Unfriendly</div>
                 </>
               )}
@@ -119,13 +126,17 @@ export default function ActorDetails({
           </div>
           <div className="flex flex-col w-1/2">
             <div className="flex items-center mb-2">
-              <GiHealthNormal className="w-6 h-6 mr-8" />
+              <div className="flex items-center w-12 h-6 mr-8">
+                <GiHealthNormal className="w-6 h-6 text-green-500" />
+                &nbsp;HP
+              </div>
               <div>
                 {actor.stats &&
                 actor.stats.currHp !== undefined &&
                 actor.stats.maxHp !== undefined ? (
                   <>
-                    {actor.stats.currHp} / {actor.stats.maxHp}&nbsp; (&nbsp;
+                    <span className="text-2xl">{actor.stats.currHp}</span> /{' '}
+                    {actor.stats.maxHp}&nbsp; (&nbsp;
                     {((actor.stats.currHp / actor.stats.maxHp) * 100).toFixed(
                       1,
                     )}
@@ -137,8 +148,11 @@ export default function ActorDetails({
               </div>
             </div>
             <div className="flex items-center">
-              <GiCheckedShield className="w-6 h-6 mr-8" />
-              <div>{actor.stats && actor.stats.ac}</div>
+              <div className="flex items-center w-12 h-6 mr-8">
+                <GiCheckedShield className="w-6 h-6 text-blue-600" />
+                &nbsp;AC
+              </div>
+              <div className="text-2xl">{actor.stats && actor.stats.ac}</div>
             </div>
           </div>
         </div>

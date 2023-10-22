@@ -1,13 +1,13 @@
 import React from "react";
-import { usePresence, assertConfiguration } from "@ably-labs/react-hooks";
 import styles from "../styles/Participants.module.scss";
+import { useAblyChannel } from "@/hooks/useAblyChannel";
 
-export default function Participants(props) {
-  const ably = assertConfiguration();
-  const [presenceData] = usePresence("headlines");
+export default function Participants() {
+  // TODO: Ably - reconnect and get presence
+  const { clientId, presenceData } = useAblyChannel('chat');
 
-  const presenceList = presenceData.map((member, index) => {    
-    const isItMe = member.clientId === ably.auth.clientId ? "(me)" : "";
+  const presenceList = presenceData.map((member, index) => { 
+    const isItMe = member.clientId === clientId ? "(me)" : "";
     
     return (
       <li key={index} className={styles.participant}>

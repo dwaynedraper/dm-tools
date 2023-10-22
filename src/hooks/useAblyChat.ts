@@ -15,8 +15,6 @@ const authUrl =
     ? 'http://localhost:3000/api/createTokenRequest'
     : `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/createTokenRequest`;
 
-console.log('authUrl', authUrl);
-
 const ably = new Ably.Realtime.Promise({
   key,
   authUrl,
