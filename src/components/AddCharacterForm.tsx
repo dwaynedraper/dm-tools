@@ -62,7 +62,7 @@ export default function AddActorForm() {
 
   return (
     <form className={`${styles.addActor}`} onSubmit={handleClick} ref={formRef}>
-      <FormSpacer12>
+      <form className="space-y-12">
         {/* --------- Header ---------------------------------------------------------------- */}
         <FlexSection>
           <Heading1>Add New Actor</Heading1>
@@ -515,7 +515,7 @@ export default function AddActorForm() {
             </fieldset>
           </div>
         </BasicSection>
-      </FormSpacer12>
+      </form>
 
       <div className="flex items-center justify-end mt-6 gap-x-6">
         <button

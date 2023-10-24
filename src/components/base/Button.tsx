@@ -48,7 +48,6 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => (
   <button
-    type="submit"
     className={`font-semibold ${button({ intent, size, rounded, className })}`}
     {...props}
   />

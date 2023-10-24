@@ -116,12 +116,19 @@ export default function Tracker({
   };
 
   const beginEncounter = () => {
+    // Iterate through currentActors and clear hpError and initError
+    const clearedActors = currentActors.map((actor) => ({
+      ...actor,
+      hpError: '',
+      initError: '',
+    }));
+
     if (isAddActorDisplayed) {
       setShowCancelModal(true);
       return;
     }
     // Roll initiative for actors if not set
-    const updatedActors = currentActors.map((actor) => {
+    const updatedActors = clearedActors.map((actor) => {
       if (actor.stats?.initiative === undefined) {
         // Assuming a d20 system, feel free to replace with your system's logic
         const initiativeRoll = Math.floor(Math.random() * 20) + 1;
@@ -294,7 +301,10 @@ export default function Tracker({
               <div
                 className=""
                 key={index}
-                onMouseEnter={() => setHovered(actor.name)}
+                onMouseEnter={() => {
+                  console.log('actor: ', actor);
+                  setHovered(actor.name);
+                }}
                 onMouseLeave={() => unsetHovered()}
                 onClick={() => setSelected(actor.name)}
               >

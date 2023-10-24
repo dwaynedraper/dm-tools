@@ -50,14 +50,6 @@ export default function ChatBar() {
         ))}
       </div>
       <div className="flex flex-col items-end h-1/10">
-        <Button
-          className={`w-fit mb-2 flex`}
-          rounded={true}
-          onClick={() => handleSend()}
-        >
-          <BiMessage className="w-6 h-6 mr-4" />
-          Send Message
-        </Button>
         <textarea
           className="w-full px-4 py-2 text-2xl border rounded-lg h-36 text-slate-200 bg-slate-700 border-slate-200/10"
           placeholder="Type your message here..."
@@ -65,6 +57,14 @@ export default function ChatBar() {
           onChange={(e) => setMessageText(e.target.value)}
           onKeyDown={handleKeyDown}
         />
+        <Button
+          className={`w-fit mt-2 flex`}
+          rounded={true}
+          onClick={() => handleSend()}
+        >
+          <BiMessage className="w-6 h-6 mr-4" />
+          Send Message
+        </Button>
       </div>
     </div>
   );
