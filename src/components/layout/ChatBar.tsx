@@ -10,16 +10,18 @@ import classNames from 'classnames';
 import { BiMessage } from 'react-icons/bi';
 
 interface ChatBubbleProps {
+  userId: string;
   text: string;
 }
 
-function ChatBubble({ text }: ChatBubbleProps) {
+function ChatBubble({ userId, text }: ChatBubbleProps) {
   return (
     <div
       className={classNames(
-        `flex justify-between items-center mb-2 px-4 py-2 rounded-lg text-slate-200 border border-slate-200/10 bg-slate-700`,
+        ` mb-2 px-4 py-2 rounded-lg text-slate-200 border border-slate-200/10 bg-slate-700`,
       )}
     >
+      <span className="mr-2 font-semibold text-cyan-500">{userId}:</span>
       {text}
     </div>
   );
@@ -86,9 +88,18 @@ export default function ChatBar() {
   return (
     <div className="flex flex-col justify-between h-screen px-2 pb-2 w-192 bg-slate-700">
       <div className="flex flex-col items-end py-2 pr-2 overflow-y-auto h-9/10 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded">
-        {messages.map((el, index) => (
-          <ChatBubble key={index} text={el.data} />
-        ))}
+        {messages.map(
+          (el, index) => (
+            console.log('el', el),
+            (
+              <ChatBubble
+                key={index}
+                userId={el.clientId}
+                text={`${el.data}`}
+              />
+            )
+          ),
+        )}
       </div>
       <div className="flex flex-col items-end h-1/10">
         <textarea
