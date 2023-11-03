@@ -11,7 +11,7 @@ export default function TrackerPage() {
         <title>D&D Initiative Tracker</title>
       </Head>
       <Tracker>
-        <DiceRoller />
+        <></>
       </Tracker>
     </Layout>
   );

@@ -1,5 +1,5 @@
 // React/Next imports
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Component imports
 import Button from '@/components/base/Button';
@@ -13,6 +13,7 @@ import { GiCheckedShield, GiSkullCrossedBones } from 'react-icons/gi';
 import * as Yup from 'yup';
 
 import { Inter, Kaushan_Script } from 'next/font/google';
+import { setIn } from 'formik';
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
@@ -36,10 +37,10 @@ export default function ActorQuickCard({
   handleInitChange,
   handleDelete,
 }: ActorQuickCardProps) {
-  const [hpValue, setHpValue] = useState('');
+  const [hpValue, setHpValue] = useState(0);
+  const [hpError, setHpError] = useState('');
   const [initValue, setInitValue] = useState(0);
   const [initError, setInitError] = useState('');
-  const [hpError, setHpError] = useState('');
 
   const { sendMessage } = useAblyChannel('chat');
 
@@ -58,6 +59,13 @@ export default function ActorQuickCard({
         'HP must be a number or a signed number (e.g. 45, +10 or -5)',
       ),
   });
+
+  useEffect(() => {
+    if (isEncounterActive) {
+      setHpError('');
+      setInitError('');
+    }
+  }, [isEncounterActive]);
 
   const validateInput = async (
     schema: Yup.Schema,
@@ -156,21 +164,17 @@ export default function ActorQuickCard({
       }
 
       handleHpChange(newHp);
-      setHpValue(''); // Clear the input
+      setHpValue(0); // Clear the input
     }
-  };
-
-  const updateHp = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHpValue(e.target.value); // Update hpValue on user input
   };
 
   const updateInit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
     const intValue = parseInt(value);
 
-    if (isNaN(intValue)) {
-      setInitError('Please enter a number.');
-      setInitValue(0); // Reset initValue to 0 if input is not a number
+    if (isNaN(intValue) || intValue === 0) {
+      setInitError('Please enter a number between 1 and 20.');
+      setInitValue(0); // Reset initValue to 0 if input is not a number or is 0
     } else if (intValue > 20) {
       setInitError('Value cannot exceed 20.');
     } else {
@@ -179,9 +183,22 @@ export default function ActorQuickCard({
     }
   };
 
-  // const updateInit = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setInitValue(parseInt(e.target.value)); // Update initValue on user input
-  // };
+  const updateHp = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const isSigned = value.startsWith('+') || value.startsWith('-');
+    const cleanedValue = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters except for + and -
+    const intValue = parseInt(cleanedValue);
+
+    if (isNaN(intValue) || (intValue === 0 && !isSigned)) {
+      setHpError('Please follow one of these: 45, +10 or -5');
+      setHpValue(0); // Reset hpValue to 0 if input is not a valid number
+    } else {
+      setHpError(''); // Clear any previous error
+      setHpValue(
+        isSigned ? (value.startsWith('+') ? +intValue : -intValue) : intValue,
+      ); // Preserve the sign if present
+    }
+  };
 
   const confirmDelete = (id: string) => {
     const userConfirmed = window.confirm(
@@ -201,7 +218,7 @@ export default function ActorQuickCard({
       <div
         key={actor.name}
         className={classNames(
-          `flex justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
+          `flex flex-col justify-between items-center mb-8 pl-4 pr-1 py-2 text-2xl rounded-xl text-slate-200 hover:bg-slate-500 hover:text-slate-50 whitespace-nowrap hover:cursor-pointer hover:shadow-lg hover:shadow-cyan-500`,
           {
             'py-4 border bg-slate-900 text-cyan-500 text-3xl': isActive,
             'py-1 bg-slate-700 border border-cyan-500': isSelected,
@@ -209,79 +226,95 @@ export default function ActorQuickCard({
           },
         )}
       >
-        <div
-          className={classNames(
-            `${kaushan.className} overflow-hidden text-ellipsis w-36 white flex items-center`,
-            {
-              underline: isActive,
-              'text-red-600': actor.stats?.currHp === 0,
-            },
-          )}
-        >
-          {actor.friendly ? (
-            <GiCheckedShield className="w-4 h-4 mr-1 text-cyan-500" />
-          ) : (
-            <GiSkullCrossedBones className="w-4 h-4 mr-1 text-red-600" />
-          )}
-          {actor.name}
-        </div>
-        <div className="flex items-center">
-          {!isEncounterActive && !actor.stats?.initiative && (
-            <>
-              <label htmlFor="setInit" className="text-base">
-                Init:
-              </label>
-              <div className="flex items-center">
+        <div className="flex items-center justify-between w-full">
+          {/* Actor Name */}
+          <div
+            className={classNames(
+              `${kaushan.className} overflow-hidden text-ellipsis w-36 white flex items-center h-6`,
+              {
+                underline: isActive,
+                'text-red-600': actor.stats?.currHp === 0,
+              },
+            )}
+          >
+            {actor.friendly ? (
+              <span className="w-6 h-6 mr-1">
+                <GiCheckedShield className=" text-cyan-500" />
+              </span>
+            ) : (
+              <span className="w-6 h-6 mr-1">
+                <GiSkullCrossedBones className="w-6 h-6 mr-1 text-red-600" />
+              </span>
+            )}
+            {actor.name}
+          </div>
+
+          {/* Inputs */}
+          <div className="flex items-center justify-end w-full">
+            {!isEncounterActive && !actor.stats?.initiative && (
+              <>
+                <label htmlFor="setInit" className="text-base">
+                  Init:
+                </label>
+                <div className="flex items-center">
+                  <input
+                    className={`${inter.className} block w-12 text-center mx-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
+                    type="text"
+                    id="setInit"
+                    name="setInit"
+                    placeholder="Init"
+                    value={initValue}
+                    onKeyDown={handleKeyDown}
+                    onChange={updateInit}
+                    onFocus={handleFocus}
+                  />
+                  {initValue !== 0 && (
+                    <Button size={'small'} rounded={true} onClick={submitInit}>
+                      Accept
+                    </Button>
+                  )}
+                  {initValue === 0 && (
+                    <Button size={'small'} rounded={true} onClick={rollInit}>
+                      Roll
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
+            {isEncounterActive && (
+              <>
                 <input
-                  className={`${inter.className} block w-12 text-center mx-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
+                  // className={`${inter.className} text-lg text-slate-800 w-12 text-center mr-4 rounded`}
+                  className={`${inter.className} block w-12 text-center mr-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
                   type="text"
-                  id="setInit"
-                  name="setInit"
-                  placeholder="Init"
-                  value={initValue}
+                  id="changeHp"
+                  name="changeHp"
+                  placeholder="HP"
+                  value={hpValue}
                   onKeyDown={handleKeyDown}
-                  onChange={updateInit}
-                  onFocus={handleFocus}
+                  onChange={updateHp}
                 />
-                {initValue !== 0 && (
-                  <Button size={'small'} rounded={true} onClick={submitInit}>
-                    Accept
-                  </Button>
-                )}
-                {initValue === 0 && (
-                  <Button size={'small'} rounded={true} onClick={rollInit}>
-                    Roll
-                  </Button>
-                )}
-              </div>
-              <div className="error-message">{initError}</div>
-            </>
-          )}
-          {isEncounterActive && (
-            <>
-              <input
-                // className={`${inter.className} text-lg text-slate-800 w-12 text-center mr-4 rounded`}
-                className={`${inter.className} block w-12 text-center mr-2 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6`}
-                type="text"
-                id="changeHp"
-                name="changeHp"
-                placeholder="HP"
-                value={hpValue}
-                onKeyDown={handleKeyDown}
-                onChange={updateHp}
-              />
-              <div className="flex items-center">
-                <div>{actor.stats?.currHp && actor.stats?.currHp}</div>
-              </div>
-            </>
-          )}
-          <FaRegTrashCan
-            className="w-4 h-4 ml-2 text-slate-500"
-            onClick={() => {
-              confirmDelete(actor._id || '');
-            }}
-          />
+                <div className="flex items-center">
+                  <div>{actor.stats?.currHp && actor.stats?.currHp}</div>
+                </div>
+              </>
+            )}
+            <FaRegTrashCan
+              className="w-4 h-4 ml-2 text-slate-500"
+              onClick={() => {
+                confirmDelete(actor._id || '');
+              }}
+            />
+          </div>
         </div>
+        {hpError && (
+          <div className="flex-wrap mt-1 text-sm error-message">{hpError}</div>
+        )}
+        {initError && (
+          <div className="flex-wrap mt-1 text-sm error-message">
+            {initError}
+          </div>
+        )}
       </div>
     </div>
   );

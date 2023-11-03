@@ -13,7 +13,17 @@ export const content = [
   './src/app/**/*.{js,ts,jsx,tsx,mdx}',
 ];
 
+// Amarante, Aladin, Almendra, Architect's Daughter
 export const theme = {
+  fontFamily: {
+    "inter" : "Inter, sans-serif",
+    "jetbrains" : "JetBrains Mono, monospace",
+    "kaushan" : "Kaushan Script, cursive",
+    "manrope" : "Manrope, sans-serif",
+    "marienda" : "Marienda, cursive",
+    "quint" : "Quintessential, cursive",
+    "satisfy" : "Satisfy, cursive",
+  },
   extend: {
     backgroundImage: {
       'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

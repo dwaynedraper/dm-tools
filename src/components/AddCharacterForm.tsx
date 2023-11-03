@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+// React/Next imports
+import React, { useRef } from 'react';
+
+import Button from '@/components/base/Button';
+import FlexSection from '@/components/forms/inner-container/FlexSection';
+import BasicSection from '@/components/forms/inner-container/BasicSection';
+import Heading1 from '@/components/forms/element/Heading1';
+
+import styles from '@/styles/AddActorForm.module.scss';
 import {
   Aladin,
   Almendra,
@@ -8,16 +16,6 @@ import {
   Quintessential,
   Racing_Sans_One,
 } from 'next/font/google';
-
-import styles from '@/styles/AddActorForm.module.scss';
-import Button from '@/components/base/Button';
-import FormSpacer12 from '@/components/forms/outer-wrapper/FormSpacer12';
-
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
-import FlexSection from '@/components/forms/inner-container/FlexSection';
-import BasicSection from '@/components/forms/inner-container/BasicSection';
-import Heading1 from '@/components/forms/element/Heading1';
-
 const aladin = Aladin({ weight: '400', subsets: ['latin'] });
 const almendra = Almendra({ weight: '700', subsets: ['latin'] });
 const amarante = Amarante({ weight: '400', subsets: ['latin'] });
@@ -62,7 +60,7 @@ export default function AddActorForm() {
 
   return (
     <form className={`${styles.addActor}`} onSubmit={handleClick} ref={formRef}>
-      <FormSpacer12>
+      <form className="space-y-12">
         {/* --------- Header ---------------------------------------------------------------- */}
         <FlexSection>
           <Heading1>Add New Actor</Heading1>
@@ -515,7 +513,7 @@ export default function AddActorForm() {
             </fieldset>
           </div>
         </BasicSection>
-      </FormSpacer12>
+      </form>
 
       <div className="flex items-center justify-end mt-6 gap-x-6">
         <button

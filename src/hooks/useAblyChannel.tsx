@@ -35,7 +35,6 @@ export function useAblyChannel(channelName: string) {
   const ably = useAbly();
 
   const clientId = ably?.auth.clientId;
-  console.log('client', clientId);
 
   return { clientId, messages, sendMessage, presenceData, updateStatus };
 }

@@ -22,7 +22,7 @@ const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
 interface TrackerProps {
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function Tracker({
@@ -116,12 +116,19 @@ export default function Tracker({
   };
 
   const beginEncounter = () => {
+    // Iterate through currentActors and clear hpError and initError
+    const clearedActors = currentActors.map((actor) => ({
+      ...actor,
+      hpError: '',
+      initError: '',
+    }));
+
     if (isAddActorDisplayed) {
       setShowCancelModal(true);
       return;
     }
     // Roll initiative for actors if not set
-    const updatedActors = currentActors.map((actor) => {
+    const updatedActors = clearedActors.map((actor) => {
       if (actor.stats?.initiative === undefined) {
         // Assuming a d20 system, feel free to replace with your system's logic
         const initiativeRoll = Math.floor(Math.random() * 20) + 1;
@@ -264,7 +271,7 @@ export default function Tracker({
             onCancel={() => setShowCancelModal(false)}
             onClose={() => setShowCancelModal(false)}
           />
-          <h1 className={`${kaushan.className} text-4xl text-slate-200 mb-4`}>
+          <h1 className={`font-kaushan text-4xl text-slate-200 mb-4`}>
             {isEncounterActive ? 'Initiative Order' : 'Encounter Setup'}
           </h1>
           <p className="p-2 mb-8 text-sm rounded-lg text-slate-400 bg-slate-200/10">
@@ -294,7 +301,10 @@ export default function Tracker({
               <div
                 className=""
                 key={index}
-                onMouseEnter={() => setHovered(actor.name)}
+                onMouseEnter={() => {
+                  console.log('actor: ', actor);
+                  setHovered(actor.name);
+                }}
                 onMouseLeave={() => unsetHovered()}
                 onClick={() => setSelected(actor.name)}
               >

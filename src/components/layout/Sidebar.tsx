@@ -8,6 +8,7 @@ import { IoEarthOutline } from 'react-icons/io5';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { Kaushan_Script } from 'next/font/google';
 import { gsap } from 'gsap';
+import { UserButton } from '@clerk/nextjs';
 
 //Register GSAP plugins
 gsap.registerPlugin();
@@ -185,6 +186,9 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                     </a>
                   </li>
                 </ul>
+                <div className="mt-2">
+                  <UserButton />
+                </div>
               </li>
             </ul>
           </nav>
