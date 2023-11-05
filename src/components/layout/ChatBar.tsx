@@ -1,5 +1,5 @@
 // React/Next imports
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Component imports
 import Button from '@/components/base/Button';
@@ -30,6 +30,11 @@ function ChatBubble({ userId, text }: ChatBubbleProps) {
 export default function ChatBar() {
   const { messages, sendMessage } = useAblyChannel('chat');
   const [messageText, setMessageText] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const rollDie = (sides: number) => Math.floor(Math.random() * sides) + 1;
 
@@ -88,18 +93,11 @@ export default function ChatBar() {
   return (
     <div className="flex flex-col justify-between h-screen px-2 pb-2 w-192 bg-slate-700">
       <div className="flex flex-col items-end py-2 pr-2 overflow-y-auto h-9/10 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-cyan-700 scrollbar-thumb-rounded">
-        {messages.map(
-          (el, index) => (
-            console.log('el', el),
-            (
-              <ChatBubble
-                key={index}
-                userId={el.clientId}
-                text={`${el.data}`}
-              />
-            )
-          ),
-        )}
+        {messages.map((el, index) => (
+          <ChatBubble key={index} userId={el.clientId} text={`${el.data}`} />
+        ))}
+        {/* Invisible div to scroll to on new message */}
+        <div ref={messagesEndRef} />
       </div>
       <div className="flex flex-col items-end h-1/10">
         <textarea

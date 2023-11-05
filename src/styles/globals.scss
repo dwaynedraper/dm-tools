@@ -50,3 +50,23 @@ body {
 input, textarea {
   @apply p-2
 }
+
+.cl-userButtonPopoverCard {
+  @apply bg-slate-700 text-cyan-500 rounded-lg border-slate-500
+}
+
+.cl-userButtonPopoverActionButtonIconBox, .cl-userButtonPopoverActionButtonIcon, .cl-userButtonPopoverActionButtonText {
+  @apply text-slate-200
+}
+
+.cl-avatarBox {
+  @apply bg-slate-700
+}
+
+.cl-formButtonPrimary {
+  @apply bg-cyan-500 hover:bg-cyan-600
+}
+
+.cl-userButtonPopoverFooter {
+  @apply hidden
+}
