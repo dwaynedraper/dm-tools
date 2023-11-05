@@ -2,13 +2,21 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { GiDiceTwentyFacesTwenty } from 'react-icons/gi';
 import { RxDashboard } from 'react-icons/rx';
-import { BsPin, BsPinFill, BsLayoutTextSidebarReverse } from 'react-icons/bs';
+import {
+  BsFillPersonFill,
+  BsPin,
+  BsPinFill,
+  BsLayoutTextSidebarReverse,
+} from 'react-icons/bs';
 import { GoSidebarExpand } from 'react-icons/go';
 import { IoEarthOutline } from 'react-icons/io5';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { Kaushan_Script } from 'next/font/google';
 import { gsap } from 'gsap';
 import { UserButton } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
+import { User } from '@clerk/nextjs/dist/types/server';
+import Link from 'next/link';
 
 //Register GSAP plugins
 gsap.registerPlugin();
@@ -62,6 +70,9 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const user = useUser();
+  console.log('Clerk user:', user);
+
   return (
     <>
       <div
@@ -94,7 +105,7 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                 <div
                   className={`${kaushan.className} text-5xl self-start text-cyan-500`}
                 >
-                  D
+                  G
                 </div>
                 <div
                   className={`${kaushan.className} mb-8 text-5xl self-start text-cyan-500`}
@@ -108,12 +119,12 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                 <p
                   className={`text-5xl text-cyan-500 whitespace-nowrap ${kaushan.className}`}
                 >
-                  DM Tools
+                  Complete
                 </p>
                 <p
-                  className={`mb-8 text-5xl text-cyan-500 ${kaushan.className}`}
+                  className={`mb-8 text-5xl text-cyan-500 ${kaushan.className} whitespace-nowrap`}
                 >
-                  Complete
+                  GM Tools
                 </p>{' '}
               </>
             )}
@@ -129,8 +140,9 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
+                        onClick={(event) => event.stopPropagation()}
                         className={classNames(
                           item.current
                             ? 'bg-gray-800 text-white'
@@ -143,7 +155,7 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                           aria-hidden="true"
                         />
                         {sidebarOpen && item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -174,8 +186,9 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                   </li>
 
                   <li className="mt-auto">
-                    <a
+                    <Link
                       href="#"
+                      onClick={(event) => event.stopPropagation()}
                       className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
                     >
                       <Cog6ToothIcon
@@ -183,12 +196,32 @@ export default function Sidebar({}: SidebarProps): React.ReactElement {
                         aria-hidden="true"
                       />
                       {sidebarOpen && 'Settings'}
-                    </a>
+                    </Link>
+                  </li>
+                  <li className="mt-auto">
+                    <Link
+                      href="/profile"
+                      onClick={(event) => event.stopPropagation()}
+                      className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 text-gray-400 rounded-md group gap-x-3 hover:bg-gray-800 hover:text-white"
+                    >
+                      <BsFillPersonFill
+                        className="w-8 h-8 shrink-0"
+                        aria-hidden="true"
+                      />
+                      {sidebarOpen && 'Profile'}
+                    </Link>
+                  </li>
+                  <li className="mt-auto">
+                    <Link
+                      href="#"
+                      onClick={(event) => event.stopPropagation()}
+                      className="flex items-center p-2 -mx-2 text-sm font-semibold leading-6 rounded-md text-cyan-400 group gap-x-3 hover:bg-gray-800 hover:text-white"
+                    >
+                      <UserButton />
+                      {sidebarOpen && 'Account'}
+                    </Link>
                   </li>
                 </ul>
-                <div className="mt-2">
-                  <UserButton />
-                </div>
               </li>
             </ul>
           </nav>
