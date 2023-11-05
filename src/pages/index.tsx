@@ -6,9 +6,5 @@ import Dashboard from '@/components/Dashboard';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  return (
-    <Layout>
-      <Dashboard></Dashboard>
-    </Layout>
-  );
+  return <Dashboard />;
 }
