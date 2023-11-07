@@ -35,7 +35,7 @@ export default function AblyComponent({
     return () => {
       if (client) client.connection.close();
     };
-  });
+  }, [client]);
 
   if (!client) return null;
 
