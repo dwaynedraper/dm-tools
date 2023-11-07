@@ -22,13 +22,17 @@ interface AddActorFormProps {
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().min(2).max(36).trim().required('Required'),
+  name: Yup.string()
+    .min(2, 'Name must be at least 2 characters.')
+    .max(36, 'Name must be 36 characters or less.')
+    .trim()
+    .required('Required'),
   armorClass: Yup.number()
-    .min(7)
-    .max(30)
+    .min(7, 'Armor Class must be at least 7.')
+    .max(30, 'Armor Class must be 30 or less.')
     .required('Required')
-    .positive()
-    .integer(),
+    .positive('Must be a positive number.')
+    .integer('Must be a whole number.'),
   hitPoints: Yup.number().required('Required').positive().integer(),
   initBonus: Yup.number().required('Required').integer(),
   friendly: Yup.boolean().required('Required'),

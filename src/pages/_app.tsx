@@ -1,25 +1,18 @@
-import '@/styles/globals.scss';
+// React/Next imports
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
+
+// Component imports
+import Layout from '@/components/layout/Layout';
+import AblyComponent from '@/components/AblyComponent';
+
+// Other imports
+import '@/styles/globals.scss';
 import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
-import { useEffect } from 'react';
-import { ClerkProvider } from '@clerk/nextjs';
-import Layout from '@/components/layout/Layout';
-
-const client = new Ably.Realtime.Promise({
-  authUrl: '/api/createTokenRequest',
-});
+import { ClerkProvider, useUser } from '@clerk/nextjs';
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      client.connection.close();
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
   return (
     <ClerkProvider
       appearance={{
@@ -43,11 +36,11 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
       {...pageProps}
     >
-      <AblyProvider client={client}>
+      <AblyComponent>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </AblyProvider>
+      </AblyComponent>
     </ClerkProvider>
   );
 }
