@@ -7,7 +7,7 @@ import AblyComponent from '@/components/AblyComponent';
 
 // Other imports
 import '@/styles/globals.scss';
-import { ClerkProvider, useUser } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
