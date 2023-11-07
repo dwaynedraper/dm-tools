@@ -1,5 +1,4 @@
 // React/Next imports
-import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 
 // Component imports
@@ -8,8 +7,6 @@ import AblyComponent from '@/components/AblyComponent';
 
 // Other imports
 import '@/styles/globals.scss';
-import * as Ably from 'ably';
-import { AblyProvider } from 'ably/react';
 import { ClerkProvider, useUser } from '@clerk/nextjs';
 
 export default function App({ Component, pageProps }: AppProps) {

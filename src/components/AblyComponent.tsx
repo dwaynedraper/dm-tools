@@ -1,9 +1,10 @@
-import React from 'react';
+// React/Next imports
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+// Other imports
 import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
-
 import { useUser } from '@clerk/nextjs';
 
 interface AblyComponentProps {
@@ -29,6 +30,12 @@ export default function AblyComponent({
       }/api/createTokenRequest?clientId=${encodeURIComponent(clientId)}`,
     });
   }, [clientId]);
+
+  useEffect(() => {
+    return () => {
+      if (client) client.connection.close();
+    };
+  });
 
   if (!client) return null;
 
