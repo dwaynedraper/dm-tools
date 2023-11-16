@@ -48,6 +48,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => (
   <button
+    type={props.type ?? 'button'}
     className={`font-semibold ${button({ intent, size, rounded, className })}`}
     {...props}
   />

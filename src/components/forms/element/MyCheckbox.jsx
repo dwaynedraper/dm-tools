@@ -10,7 +10,7 @@ export default function MyCheckbox({ children, ...props }) {
         {children}
       </label>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <div className="pl-1 m-1 border border-red-600 rounded text-slate-300 error">{meta.error}</div>
       ) : null}
     </>
   )

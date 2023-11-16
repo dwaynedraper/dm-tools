@@ -3,7 +3,6 @@ import styles from "../styles/Participants.module.scss";
 import { useAblyChannel } from "@/hooks/useAblyChannel";
 
 export default function Participants() {
-  // TODO: Ably - reconnect and get presence
   const { clientId, presenceData } = useAblyChannel('chat');
 
   const presenceList = presenceData.map((member, index) => { 
