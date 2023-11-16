@@ -29,7 +29,7 @@ export default function AblyComponent({
         router.basePath
       }/api/createTokenRequest?clientId=${encodeURIComponent(clientId)}`,
     });
-  }, [clientId]);
+  }, [clientId, router.basePath]);
 
   useEffect(() => {
     return () => {

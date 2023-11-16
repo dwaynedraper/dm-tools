@@ -1,6 +1,7 @@
 import React from 'react';
 import { Kaushan_Script } from 'next/font/google';
 import { IoAddCircle, IoAddCircleOutline } from 'react-icons/io5';
+import Image from 'next/image';
 
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
 
@@ -20,7 +21,7 @@ const party = [
   {
     name: 'Alaethiel Esteres',
     role: 'Human Fighter',
-    imageUrl: 'human_fighter.webp',
+    imageUrl: '/human_fighter.webp',
   },
 ];
 
@@ -43,10 +44,12 @@ const YourParty = () => {
             key={person.name}
             className="p-4 cursor-pointer rounded-xl bg-slate-900/20 hover:shadow-lg hover:shadow-teal-500"
           >
-            <img
+            <Image
               className="mx-auto rounded-full shadow-lgw-36 h-36 shadow-cyan-300"
               src={person.imageUrl}
               alt=""
+              height={144}
+              width={144}
             />
             <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-slate-200">
               {person.name}

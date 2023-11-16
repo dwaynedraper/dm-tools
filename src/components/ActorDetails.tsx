@@ -14,6 +14,7 @@ import ConditionSelect from '@/components/ConditionSelect';
 import ColorSelect from '@/components/ColorSelect';
 import ColorBadge from '@/components/ColorBadge';
 import { Color } from '@/types/colors';
+import Image from 'next/image';
 
 const inter = Inter({ weight: '400', subsets: ['latin'] });
 const kaushan = Kaushan_Script({ weight: '400', subsets: ['latin'] });
@@ -59,10 +60,12 @@ export default function ActorDetails({
               },
             )}
           >
-            <img
+            <Image
               className="w-24 h-24 mx-auto border-2 rounded-full border-slate-200"
               src={'/human_fighter.webp'}
               alt=""
+              height={96}
+              width={96}
             />
             {actor.name}
             &nbsp;
