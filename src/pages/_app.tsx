@@ -1,5 +1,6 @@
 // React/Next imports
 import type { AppProps } from 'next/app';
+import { Analytics } from '@vercel/analytics/react';
 
 // Component imports
 import Layout from '@/components/layout/Layout';
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AblyComponent>
         <Layout>
           <Component {...pageProps} />
+          <Analytics />
         </Layout>
       </AblyComponent>
     </ClerkProvider>

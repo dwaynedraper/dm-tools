@@ -14,6 +14,78 @@ import MyTextInput from '@/components/forms/element/MyTextInput';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 
+// type UserInput = {
+//   firstName: string;
+//   lastName: string;
+//   fullName: string;
+//   imageUrl: string;
+//   hasImage: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   primaryEmailAddress: {
+//     emailAddress: string;
+//   };
+//   username: string; // Assuming this comes from the external account you want to use
+// };
+
+// type UserOutput = {
+//   firstName: string;
+//   lastName: string;
+//   fullName: string;
+//   email: string;
+//   username: string;
+//   imageUrl: string;
+//   hasImage: boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   isProfileComplete: boolean;
+// };
+
+// function transformUser(input: any): UserOutput {
+//   // Destructure the fields you want from the input
+//   const {
+//     firstName,
+//     lastName,
+//     fullName,
+//     imageUrl,
+//     hasImage,
+//     createdAt,
+//     updatedAt,
+//     primaryEmailAddress: { emailAddress },
+//     externalAccounts,
+//   } = input;
+
+//   // Find the username from the external accounts
+//   const externalAccount = externalAccounts.find(
+//     (acc: any) => acc.id === input.primaryEmailAddress.linkedTo[0].id,
+//   );
+//   const username = externalAccount ? externalAccount.username : '';
+
+//   // Construct the new user object
+//   const userOutput: UserOutput = {
+//     firstName,
+//     lastName,
+//     fullName,
+//     email: emailAddress,
+//     username,
+//     imageUrl,
+//     hasImage,
+//     createdAt: new Date(createdAt),
+//     updatedAt: new Date(updatedAt),
+//     isProfileComplete: false, // Set to false as per your requirements
+//   };
+
+//   return userOutput;
+// }
+
+// // Usage:
+// const userObject = {
+//   /* ... Your user object ... */
+// };
+// const slimUserObject = transformUser(userObject);
+
+// // Here you would typically insert slimUserObject into MongoDB
+
 const validationSchema = Yup.object({
   firstName: Yup.string().min(2).max(36).trim().required('Required'),
   lastName: Yup.string().min(2).max(36).trim().required('Required'),
