@@ -14,20 +14,19 @@ interface AblyComponentProps {
 export default function AblyComponent({
   children,
 }: AblyComponentProps): React.ReactElement | null {
-  const user = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
   const clientId =
-    user?.user?.username ??
-    user?.user?.primaryEmailAddress?.emailAddress.split('@')[0];
+    user?.username ?? user?.primaryEmailAddress?.emailAddress.split('@')[0];
 
   const client = React.useMemo(() => {
     if (!clientId) return null;
 
     return new Ably.Realtime.Promise({
-      authUrl: `${
-        router.basePath
-      }/api/createTokenRequest?clientId=${encodeURIComponent(clientId)}`,
+      authUrl: `/api/createTokenRequest?clientId=${encodeURIComponent(
+        clientId,
+      )}`,
     });
   }, [clientId, router.basePath]);
 
@@ -38,6 +37,7 @@ export default function AblyComponent({
   }, [client]);
 
   if (!client) return null;
+  if (!isLoaded || !isSignedIn) return null;
 
   return <AblyProvider client={client}>{children}</AblyProvider>;
 }

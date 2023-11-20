@@ -271,29 +271,42 @@ export default function Tracker({
             onCancel={() => setShowCancelModal(false)}
             onClose={() => setShowCancelModal(false)}
           />
-          <h1 className={`font-kaushan text-4xl text-slate-200 mb-4`}>
-            {isEncounterActive ? 'Initiative Order' : 'Encounter Setup'}
-          </h1>
-          <p className="p-2 mb-8 text-sm rounded-lg text-slate-400 bg-slate-200/10">
-            {!isEncounterActive &&
-              'Enter initiative roll without adding your bonus'}
-            {isEncounterActive && 'Enter a number to update to that number'}
-            <br />
-            {!isEncounterActive && 'Starting encounter will roll initiatives'}
-            {isEncounterActive &&
-              'Enter + or - followed by a number to add or subtract'}
-          </p>
-          {!isEncounterActive && (
-            <Button
-              rounded={true}
-              className={`w-full self-center mb-8 flex items-center justify-center`}
-              onClick={openAddActorForm}
-            >
-              <AiOutlineUserAdd className="w-8 h-8 mr-4" />
-              Add Actor
-            </Button>
+          {isEncounterActive ? (
+            <>
+              <h1 className="mb-4 text-4xl font-kaushan text-slate-200">
+                Initiative Order
+              </h1>
+              <p className="p-2 mb-8 text-sm rounded-lg text-slate-400 bg-slate-200/10">
+                Enter a number to update to that number
+                <br />
+                Enter + or - followed by a number to add or subtract
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="mb-4 text-4xl font-kaushan text-slate-200">
+                Encounter Setup
+              </h1>
+              <p className="p-2 mb-8 text-sm rounded-lg text-slate-400 bg-slate-200/10">
+                Enter initiative roll without adding your bonus
+                <br />
+                Starting encounter will roll initiatives
+              </p>
+              <Button
+                rounded={true}
+                className={`w-full self-center mb-8 flex items-center justify-center`}
+                onClick={openAddActorForm}
+              >
+                <AiOutlineUserAdd className="w-8 h-8 mr-4" />
+                Add Actor
+              </Button>
+            </>
           )}
-          {loading && <div>Fetching actors...</div>}
+          {loading && (
+            <div className="p-2 mb-8 text-sm rounded-lg text-slate-400 bg-slate-200/10">
+              Fetching actors...
+            </div>
+          )}
 
           {!loading &&
             currentActors.length !== 0 &&
