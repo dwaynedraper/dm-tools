@@ -11,80 +11,9 @@ import MyTextArea from '@/components/forms/element/MyTextArea';
 import MyTextInput from '@/components/forms/element/MyTextInput';
 
 // Other imports
+import { useUser } from '@clerk/nextjs';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-
-// type UserInput = {
-//   firstName: string;
-//   lastName: string;
-//   fullName: string;
-//   imageUrl: string;
-//   hasImage: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-//   primaryEmailAddress: {
-//     emailAddress: string;
-//   };
-//   username: string; // Assuming this comes from the external account you want to use
-// };
-
-// type UserOutput = {
-//   firstName: string;
-//   lastName: string;
-//   fullName: string;
-//   email: string;
-//   username: string;
-//   imageUrl: string;
-//   hasImage: boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   isProfileComplete: boolean;
-// };
-
-// function transformUser(input: any): UserOutput {
-//   // Destructure the fields you want from the input
-//   const {
-//     firstName,
-//     lastName,
-//     fullName,
-//     imageUrl,
-//     hasImage,
-//     createdAt,
-//     updatedAt,
-//     primaryEmailAddress: { emailAddress },
-//     externalAccounts,
-//   } = input;
-
-//   // Find the username from the external accounts
-//   const externalAccount = externalAccounts.find(
-//     (acc: any) => acc.id === input.primaryEmailAddress.linkedTo[0].id,
-//   );
-//   const username = externalAccount ? externalAccount.username : '';
-
-//   // Construct the new user object
-//   const userOutput: UserOutput = {
-//     firstName,
-//     lastName,
-//     fullName,
-//     email: emailAddress,
-//     username,
-//     imageUrl,
-//     hasImage,
-//     createdAt: new Date(createdAt),
-//     updatedAt: new Date(updatedAt),
-//     isProfileComplete: false, // Set to false as per your requirements
-//   };
-
-//   return userOutput;
-// }
-
-// // Usage:
-// const userObject = {
-//   /* ... Your user object ... */
-// };
-// const slimUserObject = transformUser(userObject);
-
-// // Here you would typically insert slimUserObject into MongoDB
 
 const validationSchema = Yup.object({
   firstName: Yup.string().min(2).max(36).trim().required('Required'),
@@ -93,6 +22,43 @@ const validationSchema = Yup.object({
 });
 
 export default function Profile() {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [mongoUser, setMongoUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!isLoaded || !isSignedIn) return;
+        const response = await fetch(`/api/user/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: user?.primaryEmailAddress?.emailAddress,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setMongoUser(data);
+          setLoading(false);
+        } else {
+          console.error('Failed to fetch data', await response.text());
+        }
+      } catch (error) {
+        console.error('An error occurred', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log('mongoUser', mongoUser);
+  }, [mongoUser]);
+
   return (
     <section className="flex flex-col justify-between w-full h-full p-4 overflow-auto bg-slate-900">
       <div className="max-w-4xl p-8 rounded shadow bg-slate-700 shadow-cyan-500 hover:shadow-lg hover:shadow-cyan-500">
